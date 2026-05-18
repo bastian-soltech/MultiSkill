@@ -1,0 +1,8 @@
+{
+  "name": "MultiSkill",
+  "description": "A smart learning roadmap tracker with AI-powered recommendations and community-driven paths.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
