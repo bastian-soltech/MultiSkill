@@ -55,7 +55,23 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
               console.error("Error creating user profile:", err);
             }
           } else {
-            setUserProfile(userDoc.data() as UserProfile);
+            const data = userDoc.data();
+            let createdAtVal = Date.now();
+            if (data?.createdAt) {
+              if (typeof data.createdAt.toMillis === 'function') {
+                createdAtVal = data.createdAt.toMillis();
+              } else if (data.createdAt.seconds) {
+                createdAtVal = data.createdAt.seconds * 1000;
+              } else if (typeof data.createdAt === 'number') {
+                createdAtVal = data.createdAt;
+              }
+            }
+            setUserProfile({
+              displayName: data?.displayName || 'Learner',
+              email: data?.email || '',
+              photoURL: data?.photoURL || '',
+              createdAt: createdAtVal,
+            });
           }
           setLoading(false);
         }, (error) => {
