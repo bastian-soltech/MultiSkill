@@ -514,7 +514,7 @@ export default function DashboardPage() {
                           : 'bg-slate-50 text-slate-900 hover:bg-slate-900 hover:text-white'
                       }`}
                     >
-                      {isRpgMode ? t('view_path') : t('manage_path')} <ChevronRight className="w-3 h-3" />
+                      {isRpgMode ? t('view path') : t('manage path')} <ChevronRight className="w-3 h-3" />
                     </button>
                     <button 
                       onClick={(e) => { e.stopPropagation(); handleOpenEditSkill(skill); }}
@@ -673,7 +673,7 @@ export default function DashboardPage() {
                       isRpgMode ? 'bg-cyan-600 text-white hover:bg-cyan-500' : 'bg-slate-900 text-white hover:bg-indigo-600 shadow-2xl'
                     }`}
                    >
-                     {isRpgMode ? t('activate_grid') : t('launch_path')}
+                     {isRpgMode ? t('activate skill') : t('add')}
                    </button>
                  </div>
                </form>
