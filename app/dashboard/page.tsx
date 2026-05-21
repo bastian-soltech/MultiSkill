@@ -5,12 +5,12 @@ import { useAuth } from '@/lib/AuthContext';
 import { db } from '@/lib/firebase';
 import { collection, query, where, onSnapshot, addDoc, serverTimestamp, doc, updateDoc, deleteDoc } from 'firebase/firestore';
 import { motion, AnimatePresence } from 'framer-motion';
-import { 
-  Plus, 
-  Search, 
-  LogOut, 
-  ChevronRight, 
-  Zap, 
+import {
+  Plus,
+  Search,
+  LogOut,
+  ChevronRight,
+  Zap,
   Sparkles,
   LayoutGrid,
   List,
@@ -26,11 +26,11 @@ import {
   Check,
   X
 } from 'lucide-react';
-import { 
-  Radar, 
-  RadarChart, 
-  PolarGrid, 
-  PolarAngleAxis, 
+import {
+  Radar,
+  RadarChart,
+  PolarGrid,
+  PolarAngleAxis,
   ResponsiveContainer,
   BarChart,
   Bar,
@@ -158,7 +158,7 @@ export default function DashboardPage() {
           date: dateStr
         } as unknown as Log;
       });
-      
+
       setLogs(fetchedLogs);
       setLoading(false);
     }, (err) => {
@@ -185,19 +185,19 @@ export default function DashboardPage() {
     let skillXp = 0;
     // Path completion (100% progress)
     if (skill.progress >= 100) skillXp += 50;
-    
+
     // Subpath completion
     skill.roadmap?.forEach(segment => {
       segment.subpaths?.forEach(sub => {
         if (sub.completed) skillXp += 5;
       });
     });
-    
+
     // Attendance
     if (skill.attendance) {
       skillXp += skill.attendance.length * 10;
     }
-    
+
     return acc + skillXp;
   }, 0);
 
@@ -233,7 +233,7 @@ export default function DashboardPage() {
   };
 
   const { levelNum: userLevel, rankKey } = getLevelInfo();
-  const userClass = isRpgMode ? t(`rpg_title_${rankKey}`) : t(`pro_title_${rankKey}`);
+  const userClass = isRpgMode ? t(`rpg title ${rankKey}`) : t(`pro title ${rankKey}`);
 
   const avgProgress = skills.length > 0 ? Math.round(skills.reduce((acc, s) => acc + (s.progress || 0), 0) / skills.length) : 0;
 
@@ -304,9 +304,9 @@ export default function DashboardPage() {
     if (!title.trim()) return;
     setNewSkill({
       ...newSkill,
-      roadmap: [...newSkill.roadmap, { 
-        id: Math.random().toString(36).substr(2, 9), 
-        title, 
+      roadmap: [...newSkill.roadmap, {
+        id: Math.random().toString(36).substr(2, 9),
+        title,
         completed: false,
         subpaths: []
       }]
@@ -328,10 +328,10 @@ export default function DashboardPage() {
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-16">
             <div className={`lg:col-span-2 rounded-[2.5rem] p-8 border ${isRpgMode ? 'bg-slate-900 border-slate-800' : 'bg-white border-slate-100 shadow-sm'} flex flex-col md:flex-row items-center gap-10`}>
               <div className="flex-1 w-full text-center md:text-left">
-                <h3 className={`text-2xl font-serif italic mb-6 ${isRpgMode ? 'text-cyan-400' : 'text-slate-800'}`}>{isRpgMode ? t('skill_matrix') : t('skill_radar')}</h3>
+                <h3 className={`text-2xl font-serif italic mb-6 ${isRpgMode ? 'text-cyan-400' : 'text-slate-800'}`}>{isRpgMode ? t('skill matrix') : t('skill radar')}</h3>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div className={`p-6 rounded-[2rem] border ${isRpgMode ? 'bg-slate-950 border-slate-800' : 'bg-slate-50 border-transparent'}`}>
-                    <div className="text-[10px] uppercase font-black text-slate-500 mb-2 tracking-widest">{isRpgMode ? t('active_quests') : t('total_paths')}</div>
+                    <div className="text-[10px] uppercase font-black text-slate-500 mb-2 tracking-widest">{isRpgMode ? t('active quests') : t('total paths')}</div>
                     <div className={`text-4xl font-black ${isRpgMode ? 'text-white' : 'text-slate-800'}`}>{skills.length}</div>
                   </div>
                   <div className={`p-6 rounded-[2rem] border ${isRpgMode ? 'bg-slate-950 border-slate-800' : 'bg-indigo-50 border-transparent'}`}>
@@ -349,17 +349,17 @@ export default function DashboardPage() {
                   <RadarChart cx="50%" cy="50%" outerRadius="80%" data={chartData}>
                     <PolarGrid stroke={isRpgMode ? "#334155" : "#e2e8f0"} />
                     <PolarAngleAxis dataKey="subject" tick={{ fontSize: 10, fontWeight: 900, fill: isRpgMode ? '#94a3b8' : '#64748b' }} />
-                    <Radar 
-                      dataKey="A" 
-                      stroke={isRpgMode ? "#22d3ee" : "#4f46e5"} 
-                      fill={isRpgMode ? "#22d3ee" : "#4f46e5"} 
-                      fillOpacity={isRpgMode ? 0.2 : 0.6} 
+                    <Radar
+                      dataKey="A"
+                      stroke={isRpgMode ? "#22d3ee" : "#4f46e5"}
+                      fill={isRpgMode ? "#22d3ee" : "#4f46e5"}
+                      fillOpacity={isRpgMode ? 0.2 : 0.6}
                     />
                   </RadarChart>
                 </ResponsiveContainer>
               </div>
             </div>
-            
+
             <div className={`rounded-[2.5rem] p-8 border ${isRpgMode ? 'bg-slate-900 border-slate-800' : 'bg-white border-slate-100 shadow-sm'} flex flex-col`}>
               <h3 className={`text-xl font-serif italic mb-8 ${isRpgMode ? 'text-emerald-400' : 'text-slate-800'}`}>{isRpgMode ? t('quest_log') : t('recent_activity')}</h3>
               <div className="flex-1 space-y-4 overflow-y-auto max-h-[300px] pr-2 custom-scrollbar">
@@ -429,7 +429,7 @@ export default function DashboardPage() {
               </motion.div>
             )}
           </div>
-          
+
           <div className="flex flex-wrap items-center gap-4">
             {!isRpgMode && (
               <div className="bg-white border border-slate-200 p-1.5 rounded-2xl flex gap-1">
@@ -437,15 +437,14 @@ export default function DashboardPage() {
                 <button onClick={() => setViewMode('table')} className={`p-2.5 rounded-xl transition-all ${viewMode === 'table' ? 'bg-slate-900 text-white' : 'text-slate-400 hover:text-slate-600'}`}><List className="w-4 h-4" /></button>
               </div>
             )}
-            <button 
-              onClick={() => setShowAddModal(true)} 
-              className={`px-8 py-4 rounded-2xl text-[10px] font-black uppercase tracking-widest flex items-center justify-center gap-3 transition-all ${
-                isRpgMode 
-                  ? 'bg-cyan-600 text-white hover:bg-cyan-500 border-b-4 border-cyan-800 active:border-b-0 active:translate-y-1' 
-                  : 'bg-slate-900 text-white hover:bg-indigo-600 shadow-xl shadow-slate-200'
-              }`}
+            <button
+              onClick={() => setShowAddModal(true)}
+              className={`px-8 py-4 rounded-2xl text-[10px] font-black uppercase tracking-widest flex items-center justify-center gap-3 transition-all ${isRpgMode
+                ? 'bg-cyan-600 text-white hover:bg-cyan-500 border-b-4 border-cyan-800 active:border-b-0 active:translate-y-1'
+                : 'bg-slate-900 text-white hover:bg-indigo-600 shadow-xl shadow-slate-200'
+                }`}
             >
-              <Plus className="w-4 h-4" /> {isRpgMode ? t('forge_new_path') : t('initialize_new_path')}
+              <Plus className="w-4 h-4" /> {isRpgMode ? t('forge new path') : t('add new skill')}
             </button>
           </div>
         </div>
@@ -468,14 +467,13 @@ export default function DashboardPage() {
           ) : (isRpgMode || viewMode === 'grid') ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
               {skills.map((skill) => (
-                <motion.div 
-                  key={skill.id} 
-                  whileHover={{ y: -8 }} 
-                  className={`relative rounded-[2.5rem] p-10 border transition-all group overflow-hidden ${
-                    isRpgMode 
-                      ? 'bg-slate-900 border-slate-800 hover:border-cyan-500' 
-                      : 'bg-white border-slate-100 shadow-sm hover:shadow-2xl'
-                  }`}
+                <motion.div
+                  key={skill.id}
+                  whileHover={{ y: -8 }}
+                  className={`relative rounded-[2.5rem] p-10 border transition-all group overflow-hidden ${isRpgMode
+                    ? 'bg-slate-900 border-slate-800 hover:border-cyan-500'
+                    : 'bg-white border-slate-100 shadow-sm hover:shadow-2xl'
+                    }`}
                 >
                   {isRpgMode && (
                     <div className="absolute top-0 right-0 p-6">
@@ -494,46 +492,43 @@ export default function DashboardPage() {
                       {isRpgMode ? t('progress') : t('completion')}
                     </div>
                     <div className="flex items-center gap-3">
-                       <div className={`text-4xl font-black ${isRpgMode ? 'text-cyan-400' : 'text-slate-800'}`}>{skill.progress}%</div>
-                       {isRpgMode && (
-                         <div className="flex-1 h-2 bg-slate-950 rounded-full overflow-hidden border border-slate-800">
-                           <div className="h-full bg-cyan-600" style={{ width: `${skill.progress}%` }} />
-                         </div>
-                       )}
+                      <div className={`text-4xl font-black ${isRpgMode ? 'text-cyan-400' : 'text-slate-800'}`}>{skill.progress}%</div>
+                      {isRpgMode && (
+                        <div className="flex-1 h-2 bg-slate-950 rounded-full overflow-hidden border border-slate-800">
+                          <div className="h-full bg-cyan-600" style={{ width: `${skill.progress}%` }} />
+                        </div>
+                      )}
                     </div>
                   </div>
 
                   <h3 className={`text-2xl font-serif italic mb-10 ${isRpgMode ? 'text-white' : 'text-slate-800'}`}>{skill.title}</h3>
-                  
+
                   <div className="flex gap-2 w-full mt-10">
-                    <button 
-                      onClick={() => router.push(`/skills/${skill.id}`)} 
-                      className={`flex-1 py-4 rounded-xl text-[10px] font-black uppercase tracking-widest flex items-center justify-center gap-2 transition-all ${
-                        isRpgMode 
-                          ? 'bg-slate-950 text-cyan-400 border border-cyan-900 hover:bg-cyan-900/20' 
-                          : 'bg-slate-50 text-slate-900 hover:bg-slate-900 hover:text-white'
-                      }`}
+                    <button
+                      onClick={() => router.push(`/skills/${skill.id}`)}
+                      className={`flex-1 py-4 rounded-xl text-[10px] font-black uppercase tracking-widest flex items-center justify-center gap-2 transition-all ${isRpgMode
+                        ? 'bg-slate-950 text-cyan-400 border border-cyan-900 hover:bg-cyan-900/20'
+                        : 'bg-slate-50 text-slate-900 hover:bg-slate-900 hover:text-white'
+                        }`}
                     >
                       {isRpgMode ? t('view_path') : t('manage_path')} <ChevronRight className="w-3 h-3" />
                     </button>
-                    <button 
+                    <button
                       onClick={(e) => { e.stopPropagation(); handleOpenEditSkill(skill); }}
-                      className={`p-4 rounded-xl transition-all border ${
-                        isRpgMode 
-                          ? 'bg-slate-950 border-slate-800 text-cyan-400 hover:bg-cyan-900/20 hover:border-cyan-800' 
-                          : 'bg-slate-50 border-slate-100 text-slate-500 hover:bg-slate-100 hover:border-slate-200'
-                      }`}
+                      className={`p-4 rounded-xl transition-all border ${isRpgMode
+                        ? 'bg-slate-950 border-slate-800 text-cyan-400 hover:bg-cyan-900/20 hover:border-cyan-800'
+                        : 'bg-slate-50 border-slate-100 text-slate-500 hover:bg-slate-100 hover:border-slate-200'
+                        }`}
                       title="Edit Path Title"
                     >
                       <Edit3 className="w-4 h-4 text-slate-400 hover:text-cyan-400" />
                     </button>
-                    <button 
+                    <button
                       onClick={(e) => { e.stopPropagation(); handleDeleteSkill(skill.id); }}
-                      className={`p-4 rounded-xl transition-all border ${
-                        isRpgMode 
-                          ? 'bg-slate-955 border-slate-800 text-red-500 hover:bg-red-950/20 hover:border-red-900' 
-                          : 'bg-red-50 border-red-100 text-red-500 hover:bg-red-100'
-                      }`}
+                      className={`p-4 rounded-xl transition-all border ${isRpgMode
+                        ? 'bg-slate-955 border-slate-800 text-red-500 hover:bg-red-950/20 hover:border-red-900'
+                        : 'bg-red-50 border-red-100 text-red-500 hover:bg-red-100'
+                        }`}
                       title="Delete Path"
                     >
                       <Trash2 className="w-4 h-4 text-slate-400 hover:text-red-500" />
@@ -560,10 +555,9 @@ export default function DashboardPage() {
                         <div className="font-bold text-slate-800">{skill.title}</div>
                       </td>
                       <td className="px-10 py-8">
-                        <span className={`inline-block px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest ${
-                          skill.progress > 75 ? 'bg-emerald-50 text-emerald-600' :
+                        <span className={`inline-block px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest ${skill.progress > 75 ? 'bg-emerald-50 text-emerald-600' :
                           skill.progress > 40 ? 'bg-blue-50 text-blue-600' : 'bg-slate-50 text-slate-400'
-                        }`}>
+                          }`}>
                           {skill.progress > 75 ? t('advanced') : skill.progress > 40 ? t('intermediate') : t('beginner')}
                         </span>
                       </td>
@@ -580,14 +574,14 @@ export default function DashboardPage() {
                           <button onClick={() => router.push(`/skills/${skill.id}`)} className="text-[10px] font-black uppercase text-indigo-600 hover:underline tracking-widest">
                             {t('manage_path')}
                           </button>
-                          <button 
+                          <button
                             onClick={(e) => { e.stopPropagation(); handleOpenEditSkill(skill); }}
                             className="p-1.5 rounded bg-slate-50 border border-slate-100 text-slate-400 hover:text-indigo-600 hover:bg-indigo-50/50 transition-all"
                             title="Edit"
                           >
                             <Edit3 className="w-3.5 h-3.5" />
                           </button>
-                          <button 
+                          <button
                             onClick={(e) => { e.stopPropagation(); handleDeleteSkill(skill.id); }}
                             className="p-1.5 rounded bg-red-50 border border-red-100 text-red-400 hover:text-red-600 hover:bg-red-100 transition-all"
                             title="Delete"
@@ -608,213 +602,199 @@ export default function DashboardPage() {
       <AnimatePresence>
         {showAddModal && (
           <div className="fixed inset-0 z-[100] flex items-center justify-center p-6 bg-slate-900/40 backdrop-blur-sm overflow-y-auto">
-             <motion.div 
-               initial={{ opacity: 0, y: 20, scale: 0.95 }} 
-               animate={{ opacity: 1, y: 0, scale: 1 }} 
-               exit={{ opacity: 0, y: 20, scale: 0.95 }} 
-               className={`w-full max-w-2xl rounded-[3rem] p-12 shadow-2xl relative transition-colors ${
-                 isRpgMode ? 'bg-slate-900 border border-slate-800' : 'bg-white'
-               }`}
-             >
-               <button onClick={() => setShowAddModal(false)} className="absolute top-8 right-8 p-3 hover:bg-slate-50 rounded-full transition-colors">
-                 <LogOut className={`w-5 h-5 ${isRpgMode ? 'text-slate-600' : 'text-slate-400'}`} />
-               </button>
-               <h2 className={`text-4xl font-serif italic mb-2 ${isRpgMode ? 'text-white' : 'text-slate-900'}`}>
-                 {isRpgMode ? t('forge_new_path') : t('new_learning_path')}
-               </h2>
-               <form onSubmit={handleAddSkill} className="space-y-8 mt-10">
-                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                    <div className="md:col-span-2">
-                      <label className={`text-[10px] uppercase font-black mb-3 block tracking-widest ${isRpgMode ? 'text-slate-500' : 'text-slate-400'}`}>
-                        {isRpgMode ? t('discipline_name') : t('skill_discipline_name')}
-                      </label>
-                      <input 
-                        required 
-                        className={`w-full p-6 rounded-2xl font-bold text-xl focus:outline-none transition-all ${
-                          isRpgMode ? 'bg-slate-950 border border-slate-800 text-white focus:ring-2 focus:ring-cyan-500' : 'bg-slate-50 border border-slate-100 focus:ring-2 focus:ring-indigo-500'
-                        }`} 
-                        placeholder="e.g. Quantum Computing" 
-                        value={newSkill.title} 
-                        onChange={e => setNewSkill({...newSkill, title: e.target.value})} 
-                      />
-                    </div>
-                    <div>
-                      <label className={`text-[10px] uppercase font-black mb-3 block tracking-widest ${isRpgMode ? 'text-slate-500' : 'text-slate-400'}`}>{t('target_duration')}</label>
-                      <input 
-                        required 
-                        type="number" 
-                        className={`w-full p-6 rounded-2xl font-bold text-xl focus:outline-none transition-all ${
-                          isRpgMode ? 'bg-slate-950 border border-slate-800 text-white focus:ring-2 focus:ring-cyan-500' : 'bg-slate-50 border border-slate-100 focus:ring-2 focus:ring-indigo-500'
-                        }`} 
-                        value={newSkill.targetDuration} 
-                        onChange={e => setNewSkill({...newSkill, targetDuration: parseInt(e.target.value)})} 
-                      />
-                    </div>
-                    <div>
-                      <label className={`text-[10px] uppercase font-black mb-3 block tracking-widest ${isRpgMode ? 'text-slate-500' : 'text-slate-400'}`}>{t('time_unit')}</label>
-                      <select 
-                        className={`w-full p-6 rounded-2xl font-bold text-lg focus:outline-none cursor-pointer transition-all ${
-                          isRpgMode ? 'bg-slate-950 border border-slate-800 text-white focus:ring-2 focus:ring-cyan-500' : 'bg-slate-50 border border-slate-100 focus:ring-2 focus:ring-indigo-500 appearance-none'
-                        }`} 
-                        value={newSkill.targetUnit} 
-                        onChange={e => setNewSkill({...newSkill, targetUnit: e.target.value})}
-                      >
-                        <option value="days">{t('days')}</option>
-                        <option value="weeks">{t('weeks')}</option>
-                        <option value="months">{t('months')}</option>
-                      </select>
-                    </div>
-                 </div>
-                 <div className="pt-6 flex gap-6">
-                   <button type="button" onClick={() => setShowAddModal(false)} className={`flex-1 py-5 text-[10px] font-black uppercase tracking-widest transition-colors ${isRpgMode ? 'text-slate-600 hover:text-white' : 'text-slate-400 hover:text-slate-900'}`}>{t('cancel')}</button>
-                   <button 
-                    type="submit" 
-                    className={`flex-1 py-5 rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all ${
-                      isRpgMode ? 'bg-cyan-600 text-white hover:bg-cyan-500' : 'bg-slate-900 text-white hover:bg-indigo-600 shadow-2xl'
-                    }`}
-                   >
-                     {isRpgMode ? t('activate_grid') : t('launch_path')}
-                   </button>
-                 </div>
-               </form>
-             </motion.div>
+            <motion.div
+              initial={{ opacity: 0, y: 20, scale: 0.95 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: 20, scale: 0.95 }}
+              className={`w-full max-w-2xl rounded-[3rem] p-12 shadow-2xl relative transition-colors ${isRpgMode ? 'bg-slate-900 border border-slate-800' : 'bg-white'
+                }`}
+            >
+              <button onClick={() => setShowAddModal(false)} className="absolute top-8 right-8 p-3 hover:bg-slate-50 rounded-full transition-colors">
+                <LogOut className={`w-5 h-5 ${isRpgMode ? 'text-slate-600' : 'text-slate-400'}`} />
+              </button>
+              <h2 className={`text-4xl font-serif italic mb-2 ${isRpgMode ? 'text-white' : 'text-slate-900'}`}>
+                {isRpgMode ? t('forge_new_path') : t('new_learning_path')}
+              </h2>
+              <form onSubmit={handleAddSkill} className="space-y-8 mt-10">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                  <div className="md:col-span-2">
+                    <label className={`text-[10px] uppercase font-black mb-3 block tracking-widest ${isRpgMode ? 'text-slate-500' : 'text-slate-400'}`}>
+                      {isRpgMode ? t('discipline_name') : t('skill_discipline_name')}
+                    </label>
+                    <input
+                      required
+                      className={`w-full p-6 rounded-2xl font-bold text-xl focus:outline-none transition-all ${isRpgMode ? 'bg-slate-950 border border-slate-800 text-white focus:ring-2 focus:ring-cyan-500' : 'bg-slate-50 border border-slate-100 focus:ring-2 focus:ring-indigo-500'
+                        }`}
+                      placeholder="e.g. Quantum Computing"
+                      value={newSkill.title}
+                      onChange={e => setNewSkill({ ...newSkill, title: e.target.value })}
+                    />
+                  </div>
+                  <div>
+                    <label className={`text-[10px] uppercase font-black mb-3 block tracking-widest ${isRpgMode ? 'text-slate-500' : 'text-slate-400'}`}>{t('target_duration')}</label>
+                    <input
+                      required
+                      type="number"
+                      className={`w-full p-6 rounded-2xl font-bold text-xl focus:outline-none transition-all ${isRpgMode ? 'bg-slate-950 border border-slate-800 text-white focus:ring-2 focus:ring-cyan-500' : 'bg-slate-50 border border-slate-100 focus:ring-2 focus:ring-indigo-500'
+                        }`}
+                      value={newSkill.targetDuration}
+                      onChange={e => setNewSkill({ ...newSkill, targetDuration: parseInt(e.target.value) })}
+                    />
+                  </div>
+                  <div>
+                    <label className={`text-[10px] uppercase font-black mb-3 block tracking-widest ${isRpgMode ? 'text-slate-500' : 'text-slate-400'}`}>{t('time_unit')}</label>
+                    <select
+                      className={`w-full p-6 rounded-2xl font-bold text-lg focus:outline-none cursor-pointer transition-all ${isRpgMode ? 'bg-slate-950 border border-slate-800 text-white focus:ring-2 focus:ring-cyan-500' : 'bg-slate-50 border border-slate-100 focus:ring-2 focus:ring-indigo-500 appearance-none'
+                        }`}
+                      value={newSkill.targetUnit}
+                      onChange={e => setNewSkill({ ...newSkill, targetUnit: e.target.value })}
+                    >
+                      <option value="days">{t('days')}</option>
+                      <option value="weeks">{t('weeks')}</option>
+                      <option value="months">{t('months')}</option>
+                    </select>
+                  </div>
+                </div>
+                <div className="pt-6 flex gap-6">
+                  <button type="button" onClick={() => setShowAddModal(false)} className={`flex-1 py-5 text-[10px] font-black uppercase tracking-widest transition-colors ${isRpgMode ? 'text-slate-600 hover:text-white' : 'text-slate-400 hover:text-slate-900'}`}>{t('cancel')}</button>
+                  <button
+                    type="submit"
+                    className={`flex-1 py-5 rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all ${isRpgMode ? 'bg-cyan-600 text-white hover:bg-cyan-500' : 'bg-slate-900 text-white hover:bg-indigo-600 shadow-2xl'
+                      }`}
+                  >
+                    {isRpgMode ? t('activate grid') : t('add')}
+                  </button>
+                </div>
+              </form>
+            </motion.div>
           </div>
         )}
 
         {showEditModal && editingSkill && (
           <div className="fixed inset-0 z-[100] flex items-center justify-center p-6 bg-slate-900/40 backdrop-blur-sm overflow-y-auto">
-             <motion.div 
-               initial={{ opacity: 0, y: 20, scale: 0.95 }} 
-               animate={{ opacity: 1, y: 0, scale: 1 }} 
-               exit={{ opacity: 0, y: 20, scale: 0.95 }} 
-               className={`w-full max-w-2xl rounded-[3rem] p-12 shadow-2xl relative transition-colors ${
-                 isRpgMode ? 'bg-slate-900 border border-slate-800' : 'bg-white'
-               }`}
-             >
-               <button onClick={() => { setShowEditModal(false); setEditingSkill(null); }} className="absolute top-8 right-8 p-3 hover:bg-slate-50 rounded-full transition-colors">
-                 <LogOut className={`w-5 h-5 ${isRpgMode ? 'text-slate-600' : 'text-slate-400'}`} />
-               </button>
-               <h2 className={`text-4xl font-serif italic mb-2 ${isRpgMode ? 'text-white' : 'text-slate-900'}`}>
-                 Edit Skill Path
-               </h2>
-               <form onSubmit={handleSaveEditSkill} className="space-y-8 mt-10">
-                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                    <div className="md:col-span-2">
-                       <label className={`text-[10px] uppercase font-black mb-3 block tracking-widest ${isRpgMode ? 'text-slate-500' : 'text-slate-400'}`}>
-                         Skill / Discipline Name
-                       </label>
-                       <input 
-                         required 
-                         className={`w-full p-6 rounded-2xl font-bold text-xl focus:outline-none transition-all ${
-                           isRpgMode ? 'bg-slate-950 border border-slate-800 text-white focus:ring-2 focus:ring-cyan-500' : 'bg-slate-50 border border-slate-100 focus:ring-2 focus:ring-indigo-500'
-                         }`} 
-                         placeholder="e.g. Quantum Computing" 
-                         value={editingSkillTitle} 
-                         onChange={e => setEditingSkillTitle(e.target.value)} 
-                       />
-                    </div>
-                    <div>
-                      <label className={`text-[10px] uppercase font-black mb-3 block tracking-widest ${isRpgMode ? 'text-slate-500' : 'text-slate-400'}`}>{t('target_duration')}</label>
-                      <input 
-                        required 
-                        type="number" 
-                        className={`w-full p-6 rounded-2xl font-bold text-xl focus:outline-none transition-all ${
-                          isRpgMode ? 'bg-slate-950 border border-slate-800 text-white focus:ring-2 focus:ring-cyan-500' : 'bg-slate-50 border border-slate-100 focus:ring-2 focus:ring-indigo-500'
-                        }`} 
-                        value={editingSkillDuration} 
-                        onChange={e => setEditingSkillDuration(parseInt(e.target.value) || 3)} 
-                      />
-                    </div>
-                    <div>
-                      <label className={`text-[10px] uppercase font-black mb-3 block tracking-widest ${isRpgMode ? 'text-slate-500' : 'text-slate-400'}`}>{t('time_unit')}</label>
-                      <select 
-                        className={`w-full p-6 rounded-2xl font-bold text-lg focus:outline-none cursor-pointer transition-all ${
-                          isRpgMode ? 'bg-slate-950 border border-slate-800 text-white focus:ring-2 focus:ring-cyan-500' : 'bg-slate-50 border border-slate-100 focus:ring-2 focus:ring-indigo-500 appearance-none'
-                        }`} 
-                        value={editingSkillUnit} 
-                        onChange={e => setEditingSkillUnit(e.target.value)}
-                      >
-                        <option value="days">{t('days')}</option>
-                        <option value="weeks">{t('weeks')}</option>
-                        <option value="months">{t('months')}</option>
-                      </select>
-                    </div>
-                 </div>
-                 <div className="pt-6 flex gap-6">
-                   <button type="button" onClick={() => { setShowEditModal(false); setEditingSkill(null); }} className={`flex-1 py-5 text-[10px] font-black uppercase tracking-widest transition-colors ${isRpgMode ? 'text-slate-600 hover:text-white' : 'text-slate-400 hover:text-slate-900'}`}>{t('cancel')}</button>
-                   <button 
-                    type="submit" 
-                    className={`flex-1 py-5 rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all ${
-                      isRpgMode ? 'bg-cyan-600 text-white hover:bg-cyan-500' : 'bg-slate-900 text-white hover:bg-indigo-600 shadow-2xl'
-                    }`}
-                   >
-                     Save Changes
-                   </button>
-                 </div>
-               </form>
-             </motion.div>
+            <motion.div
+              initial={{ opacity: 0, y: 20, scale: 0.95 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: 20, scale: 0.95 }}
+              className={`w-full max-w-2xl rounded-[3rem] p-12 shadow-2xl relative transition-colors ${isRpgMode ? 'bg-slate-900 border border-slate-800' : 'bg-white'
+                }`}
+            >
+              <button onClick={() => { setShowEditModal(false); setEditingSkill(null); }} className="absolute top-8 right-8 p-3 hover:bg-slate-50 rounded-full transition-colors">
+                <LogOut className={`w-5 h-5 ${isRpgMode ? 'text-slate-600' : 'text-slate-400'}`} />
+              </button>
+              <h2 className={`text-4xl font-serif italic mb-2 ${isRpgMode ? 'text-white' : 'text-slate-900'}`}>
+                Edit Skill Path
+              </h2>
+              <form onSubmit={handleSaveEditSkill} className="space-y-8 mt-10">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                  <div className="md:col-span-2">
+                    <label className={`text-[10px] uppercase font-black mb-3 block tracking-widest ${isRpgMode ? 'text-slate-500' : 'text-slate-400'}`}>
+                      Skill / Discipline Name
+                    </label>
+                    <input
+                      required
+                      className={`w-full p-6 rounded-2xl font-bold text-xl focus:outline-none transition-all ${isRpgMode ? 'bg-slate-950 border border-slate-800 text-white focus:ring-2 focus:ring-cyan-500' : 'bg-slate-50 border border-slate-100 focus:ring-2 focus:ring-indigo-500'
+                        }`}
+                      placeholder="e.g. Quantum Computing"
+                      value={editingSkillTitle}
+                      onChange={e => setEditingSkillTitle(e.target.value)}
+                    />
+                  </div>
+                  <div>
+                    <label className={`text-[10px] uppercase font-black mb-3 block tracking-widest ${isRpgMode ? 'text-slate-500' : 'text-slate-400'}`}>{t('target_duration')}</label>
+                    <input
+                      required
+                      type="number"
+                      className={`w-full p-6 rounded-2xl font-bold text-xl focus:outline-none transition-all ${isRpgMode ? 'bg-slate-950 border border-slate-800 text-white focus:ring-2 focus:ring-cyan-500' : 'bg-slate-50 border border-slate-100 focus:ring-2 focus:ring-indigo-500'
+                        }`}
+                      value={editingSkillDuration}
+                      onChange={e => setEditingSkillDuration(parseInt(e.target.value) || 3)}
+                    />
+                  </div>
+                  <div>
+                    <label className={`text-[10px] uppercase font-black mb-3 block tracking-widest ${isRpgMode ? 'text-slate-500' : 'text-slate-400'}`}>{t('time_unit')}</label>
+                    <select
+                      className={`w-full p-6 rounded-2xl font-bold text-lg focus:outline-none cursor-pointer transition-all ${isRpgMode ? 'bg-slate-950 border border-slate-800 text-white focus:ring-2 focus:ring-cyan-500' : 'bg-slate-50 border border-slate-100 focus:ring-2 focus:ring-indigo-500 appearance-none'
+                        }`}
+                      value={editingSkillUnit}
+                      onChange={e => setEditingSkillUnit(e.target.value)}
+                    >
+                      <option value="days">{t('days')}</option>
+                      <option value="weeks">{t('weeks')}</option>
+                      <option value="months">{t('months')}</option>
+                    </select>
+                  </div>
+                </div>
+                <div className="pt-6 flex gap-6">
+                  <button type="button" onClick={() => { setShowEditModal(false); setEditingSkill(null); }} className={`flex-1 py-5 text-[10px] font-black uppercase tracking-widest transition-colors ${isRpgMode ? 'text-slate-600 hover:text-white' : 'text-slate-400 hover:text-slate-900'}`}>{t('cancel')}</button>
+                  <button
+                    type="submit"
+                    className={`flex-1 py-5 rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all ${isRpgMode ? 'bg-cyan-600 text-white hover:bg-cyan-500' : 'bg-slate-900 text-white hover:bg-indigo-600 shadow-2xl'
+                      }`}
+                  >
+                    Save Changes
+                  </button>
+                </div>
+              </form>
+            </motion.div>
           </div>
         )}
       </AnimatePresence>
-    <AnimatePresence>
+      <AnimatePresence>
         {confirmDelete && (
           <div className="fixed inset-0 z-[110] flex items-center justify-center p-6 bg-slate-900/60 backdrop-blur-sm overflow-y-auto">
-             <motion.div 
-               initial={{ opacity: 0, y: 20, scale: 0.95 }} 
-               animate={{ opacity: 1, y: 0, scale: 1 }} 
-               exit={{ opacity: 0, y: 20, scale: 0.95 }} 
-               className={`w-full max-w-md rounded-[2.5rem] p-10 shadow-2xl relative transition-colors ${
-                 isRpgMode ? 'bg-slate-900 border border-slate-800 text-white' : 'bg-white text-slate-900'
-               }`}
-             >
-               <button 
-                 onClick={() => setConfirmDelete(null)} 
-                 className={`absolute top-6 right-6 p-2 rounded-full transition-colors ${
-                   isRpgMode ? 'hover:bg-slate-800 text-slate-400' : 'hover:bg-slate-100 text-slate-400'
-                 }`}
-               >
-                 <X className="w-5 h-5" />
-               </button>
-               
-               <div className="flex flex-col items-center text-center mt-4">
-                 <div className={`p-4 rounded-full mb-6 ${
-                   isRpgMode ? 'bg-red-950/40 text-red-400 border border-red-900/50' : 'bg-red-50 text-red-500 border border-red-100'
-                 }`}>
-                   <Trash2 className="w-8 h-8" />
-                 </div>
-                 
-                 <h3 className="text-2xl font-serif italic mb-3">
-                   {t('confirm_delete') || 'Delete Item?'}
-                 </h3>
-                 <p className={`text-sm mb-8 ${isRpgMode ? 'text-slate-400' : 'text-slate-500'}`}>
-                   {confirmDelete.message}
-                 </p>
-                 
-                 <div className="flex gap-4 w-full">
-                   <button 
-                     type="button" 
-                     onClick={() => setConfirmDelete(null)} 
-                     className={`flex-1 py-4 text-[10px] font-black uppercase tracking-widest rounded-xl border transition-colors ${
-                       isRpgMode 
-                         ? 'border-slate-800 text-slate-400 hover:bg-slate-800' 
-                         : 'border-slate-200 text-slate-500 hover:bg-slate-50'
-                     }`}
-                   >
-                     {t('cancel') || 'Cancel'}
-                   </button>
-                   <button 
-                     type="button" 
-                     onClick={() => {
-                       confirmDelete.action();
-                       setConfirmDelete(null);
-                     }}
-                     className={`flex-1 py-4 text-[10px] font-black uppercase tracking-widest rounded-xl text-white transition-colors bg-red-600 hover:bg-red-500 shadow-md`}
-                   >
-                     {t('delete') || 'Delete'}
-                   </button>
-                 </div>
-               </div>
-             </motion.div>
+            <motion.div
+              initial={{ opacity: 0, y: 20, scale: 0.95 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: 20, scale: 0.95 }}
+              className={`w-full max-w-md rounded-[2.5rem] p-10 shadow-2xl relative transition-colors ${isRpgMode ? 'bg-slate-900 border border-slate-800 text-white' : 'bg-white text-slate-900'
+                }`}
+            >
+              <button
+                onClick={() => setConfirmDelete(null)}
+                className={`absolute top-6 right-6 p-2 rounded-full transition-colors ${isRpgMode ? 'hover:bg-slate-800 text-slate-400' : 'hover:bg-slate-100 text-slate-400'
+                  }`}
+              >
+                <X className="w-5 h-5" />
+              </button>
+
+              <div className="flex flex-col items-center text-center mt-4">
+                <div className={`p-4 rounded-full mb-6 ${isRpgMode ? 'bg-red-950/40 text-red-400 border border-red-900/50' : 'bg-red-50 text-red-500 border border-red-100'
+                  }`}>
+                  <Trash2 className="w-8 h-8" />
+                </div>
+
+                <h3 className="text-2xl font-serif italic mb-3">
+                  {t('confirm_delete') || 'Delete Item?'}
+                </h3>
+                <p className={`text-sm mb-8 ${isRpgMode ? 'text-slate-400' : 'text-slate-500'}`}>
+                  {confirmDelete.message}
+                </p>
+
+                <div className="flex gap-4 w-full">
+                  <button
+                    type="button"
+                    onClick={() => setConfirmDelete(null)}
+                    className={`flex-1 py-4 text-[10px] font-black uppercase tracking-widest rounded-xl border transition-colors ${isRpgMode
+                      ? 'border-slate-800 text-slate-400 hover:bg-slate-800'
+                      : 'border-slate-200 text-slate-500 hover:bg-slate-50'
+                      }`}
+                  >
+                    {t('cancel') || 'Cancel'}
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      confirmDelete.action();
+                      setConfirmDelete(null);
+                    }}
+                    className={`flex-1 py-4 text-[10px] font-black uppercase tracking-widest rounded-xl text-white transition-colors bg-red-600 hover:bg-red-500 shadow-md`}
+                  >
+                    {t('delete') || 'Delete'}
+                  </button>
+                </div>
+              </div>
+            </motion.div>
           </div>
         )}
       </AnimatePresence>
