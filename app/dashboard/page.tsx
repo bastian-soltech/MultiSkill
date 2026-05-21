@@ -669,7 +669,6 @@ export default function DashboardPage() {
             </motion.div>
           </div>
         )}
-
         {showEditModal && editingSkill && (
           <div className="fixed inset-0 z-[100] flex items-center justify-center p-6 bg-slate-900/40 backdrop-blur-sm overflow-y-auto">
             <motion.div
