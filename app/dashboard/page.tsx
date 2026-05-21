@@ -444,7 +444,7 @@ export default function DashboardPage() {
                 : 'bg-slate-900 text-white hover:bg-indigo-600 shadow-xl shadow-slate-200'
                 }`}
             >
-              <Plus className="w-4 h-4" /> {isRpgMode ? t('forge new path') : t('add new skill')}
+              <Plus className="w-4 h-4" /> {isRpgMode ? t('forge new skill') : t('add new skill')}
             </button>
           </div>
         </div>
