@@ -47,6 +47,20 @@ export default function MilestonesPage() {
   const [skills, setSkills] = useState<Skill[]>([]);
   const [loading, setLoading] = useState(true);
 
+  // Theme tokens matching landing page
+  const theme = {
+    bg: isRpgMode ? 'bg-slate-950' : 'bg-white',
+    text: isRpgMode ? 'text-slate-100' : 'text-slate-900',
+    muted: isRpgMode ? 'text-slate-400' : 'text-slate-500',
+    accent: isRpgMode ? 'text-emerald-400' : 'text-indigo-600',
+    accentBg: isRpgMode ? 'bg-emerald-500/10' : 'bg-indigo-50',
+    accentBorder: isRpgMode ? 'border-emerald-500/20' : 'border-indigo-100',
+    card: isRpgMode ? 'bg-slate-900/50 border-slate-800 shadow-[4px_4px_0px_0px_rgba(0,0,0,0.3)]' : 'bg-white border-slate-100 shadow-sm',
+    button: isRpgMode ? 'bg-emerald-500 text-slate-950 hover:bg-emerald-400 shadow-[4px_4px_0px_0px_rgba(16,185,129,0.3)]' : 'bg-slate-900 text-white hover:bg-indigo-600 shadow-xl shadow-indigo-100',
+    font: isRpgMode ? 'font-mono' : 'font-sans',
+    heading: isRpgMode ? 'font-black uppercase tracking-tighter italic' : 'font-serif italic tracking-tight'
+  };
+
   useEffect(() => {
     async function fetchSkills() {
       if (!user) return;

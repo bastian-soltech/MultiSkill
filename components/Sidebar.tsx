@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
+import { motion } from 'framer-motion';
 import { usePathname } from 'next/navigation';
 import { 
   LayoutDashboard, 
@@ -38,11 +39,26 @@ interface SidebarProps {
 
 export default function Sidebar({ isOpen, setIsOpen }: SidebarProps) {
   const pathname = usePathname();
-  const { logout, userProfile } = useAuth();
   const { isRpgMode, setIsRpgMode } = useMode();
   const { language, setLanguage, t } = useLanguage();
+  const { userProfile, logout } = useAuth();
 
   const items = NAV_ITEMS(t);
+
+  // Theme tokens matching landing page and dashboard
+  const theme = {
+    bg: isRpgMode ? 'bg-slate-950' : 'bg-white',
+    text: isRpgMode ? 'text-slate-100' : 'text-slate-900',
+    muted: isRpgMode ? 'text-slate-400' : 'text-slate-500',
+    accent: isRpgMode ? 'text-emerald-400' : 'text-indigo-600',
+    accentBg: isRpgMode ? 'bg-emerald-500/10' : 'bg-indigo-50',
+    accentBorder: isRpgMode ? 'border-emerald-500/20' : 'border-indigo-100',
+    navActive: isRpgMode ? 'bg-emerald-500 text-slate-950 shadow-[4px_4px_0px_0px_rgba(16,185,129,0.3)]' : 'bg-slate-900 text-white shadow-xl shadow-slate-200',
+    navHover: isRpgMode ? 'hover:bg-slate-900 hover:text-emerald-400' : 'hover:bg-slate-50 hover:text-indigo-600',
+    card: isRpgMode ? 'bg-slate-900 border-slate-800' : 'bg-slate-50 border-slate-100',
+    font: isRpgMode ? 'font-mono' : 'font-sans',
+    heading: isRpgMode ? 'font-black uppercase tracking-tighter italic' : 'font-serif italic tracking-tight'
+  };
 
   const NavLink = ({ item }: { item: ReturnType<typeof NAV_ITEMS>[0] }) => {
     const isActive = pathname === item.href;
@@ -50,13 +66,13 @@ export default function Sidebar({ isOpen, setIsOpen }: SidebarProps) {
       <Link
         href={item.href}
         onClick={() => setIsOpen(false)}
-        className={`flex items-center gap-4 px-6 py-4 rounded-2xl transition-all group ${
+        className={`flex items-center gap-4 px-6 py-4 transition-all group ${isRpgMode ? 'rounded-none' : 'rounded-2xl'} ${
           isActive 
-            ? isRpgMode ? 'bg-cyan-600 text-white shadow-xl' : 'bg-indigo-600 text-white shadow-xl shadow-indigo-100' 
-            : isRpgMode ? 'text-slate-500 hover:bg-slate-900 hover:text-cyan-400' : 'text-slate-400 hover:bg-slate-50 hover:text-slate-900'
+            ? theme.navActive 
+            : `text-slate-500 ${theme.navHover}`
         }`}
       >
-        <item.icon className={`w-5 h-5 ${isActive ? 'text-white' : isRpgMode ? 'group-hover:text-cyan-400' : 'group-hover:text-indigo-600'}`} />
+        <item.icon className={`w-5 h-5 ${isActive ? (isRpgMode ? 'text-slate-950' : 'text-white') : 'group-hover:scale-110 transition-transform'}`} />
         <span className="text-[10px] font-black uppercase tracking-[0.2em]">{item.name}</span>
       </Link>
     );
@@ -66,31 +82,34 @@ export default function Sidebar({ isOpen, setIsOpen }: SidebarProps) {
     <>
       {/* Sidebar Container */}
       <aside
-        className={`fixed inset-y-0 left-0 z-[60] w-72 border-r transition-all duration-300 ease-in-out lg:translate-x-0 ${
-          isRpgMode ? 'bg-slate-950 border-slate-900 text-slate-100' : 'bg-white border-slate-100 text-slate-900'
-        } ${
+        className={`fixed inset-y-0 left-0 z-[60] w-72 border-r transition-all duration-500 ease-in-out lg:translate-x-0 ${theme.bg} ${isRpgMode ? 'border-slate-900' : 'border-slate-100'} ${theme.font} ${
           isOpen ? 'translate-x-0 shadow-2xl' : '-translate-x-full'
         }`}
       >
         <div className={`h-[100vh] max-h-screen flex flex-col p-8 pb-28 overflow-y-auto ${isRpgMode ? 'rpg-scrollbar' : 'custom-scrollbar'}`}>
           {/* Logo */}
           <div className="flex items-center gap-3 mb-12 px-2">
-            <div className={`w-10 h-10 rounded-xl flex items-center justify-center text-white font-bold text-xl ${isRpgMode ? 'bg-cyan-600' : 'bg-indigo-600'}`}>M</div>
-            <span className={`font-serif italic text-2xl tracking-tight ${isRpgMode ? 'text-white' : 'text-slate-800'}`}>MultiSkill</span>
+            <motion.div 
+              whileHover={{ rotate: isRpgMode ? 90 : 0 }}
+              className={`w-10 h-10 flex items-center justify-center text-white font-bold text-xl ${isRpgMode ? 'bg-emerald-500 text-slate-950 rounded-none' : 'bg-indigo-600 rounded-xl'}`}
+            >
+              M
+            </motion.div>
+            <span className={`text-2xl ${theme.heading} ${theme.text}`}>MultiSkill</span>
           </div>
 
           {/* Language Toggle */}
           <div className="px-2 mb-4">
-            <div className={`flex p-1 rounded-xl shadow-inner ${isRpgMode ? 'bg-slate-900' : 'bg-slate-50'}`}>
+            <div className={`flex p-1 rounded-xl transition-all ${isRpgMode ? 'bg-slate-900 border border-slate-800' : 'bg-slate-50'}`}>
               <button 
                 onClick={() => setLanguage('en')}
-                className={`flex-1 flex items-center justify-center py-2 rounded-lg transition-all ${language === 'en' ? (isRpgMode ? 'bg-slate-800 text-cyan-400 border border-cyan-900/50' : 'bg-white text-slate-900 shadow-sm') : 'text-slate-500 hover:text-slate-400'}`}
+                className={`flex-1 flex items-center justify-center py-2 rounded-lg transition-all ${language === 'en' ? (isRpgMode ? 'bg-emerald-500/20 text-emerald-400' : 'bg-white text-indigo-600 shadow-sm') : 'text-slate-500 hover:text-slate-400'}`}
               >
                 <span className="text-[8px] font-black uppercase tracking-widest leading-none">English</span>
               </button>
               <button 
                 onClick={() => setLanguage('id')}
-                className={`flex-1 flex items-center justify-center py-2 rounded-lg transition-all ${language === 'id' ? (isRpgMode ? 'bg-slate-800 text-cyan-400 border border-cyan-900/50' : 'bg-white text-slate-900 shadow-sm') : 'text-slate-500 hover:text-slate-400'}`}
+                className={`flex-1 flex items-center justify-center py-2 rounded-lg transition-all ${language === 'id' ? (isRpgMode ? 'bg-emerald-500/20 text-emerald-400' : 'bg-white text-indigo-600 shadow-sm') : 'text-slate-500 hover:text-slate-400'}`}
               >
                 <span className="text-[8px] font-black uppercase tracking-widest leading-none">Indonesia</span>
               </button>
@@ -99,27 +118,27 @@ export default function Sidebar({ isOpen, setIsOpen }: SidebarProps) {
 
           {/* Mode Toggle */}
           <div className="px-2 mb-10">
-            <div className={`flex p-1 rounded-xl shadow-inner ${isRpgMode ? 'bg-slate-900' : 'bg-slate-50'}`}>
+            <div className={`flex p-1 rounded-xl transition-all ${isRpgMode ? 'bg-slate-900 border border-slate-800' : 'bg-slate-50'}`}>
               <button 
                 onClick={() => setIsRpgMode(false)}
-                className={`flex-1 flex items-center justify-center gap-2 py-2.5 rounded-lg transition-all ${!isRpgMode ? 'bg-white text-slate-900 shadow-md' : 'text-slate-500 hover:text-slate-300'}`}
+                className={`flex-1 flex items-center justify-center gap-2 py-2.5 rounded-lg transition-all ${!isRpgMode ? 'bg-white text-indigo-600 shadow-md' : 'text-slate-500 hover:text-slate-300'}`}
               >
                 <Shield className="w-3 h-3" />
-                <span className="text-[8px] font-black uppercase tracking-widest leading-none">{t('pro_mode')}</span>
+                <span className="text-[8px] font-black uppercase tracking-widest leading-none">PRO</span>
               </button>
               <button 
                 onClick={() => setIsRpgMode(true)}
-                className={`flex-1 flex items-center justify-center gap-2 py-2.5 rounded-lg transition-all ${isRpgMode ? 'bg-slate-800 text-cyan-400 shadow-md border border-cyan-900/50' : 'text-slate-400 hover:text-slate-600'}`}
+                className={`flex-1 flex items-center justify-center gap-2 py-2.5 rounded-lg transition-all ${isRpgMode ? 'bg-emerald-500 text-slate-950 shadow-md' : 'text-slate-400 hover:text-slate-600'}`}
               >
                 <Gamepad2 className="w-3 h-3" />
-                <span className="text-[8px] font-black uppercase tracking-widest leading-none">{t('rpg_mode')}</span>
+                <span className="text-[8px] font-black uppercase tracking-widest leading-none">RPG</span>
               </button>
             </div>
           </div>
 
           {/* Navigation */}
           <nav className="flex-1 space-y-2">
-            <div className={`text-[10px] uppercase font-black tracking-[0.2em] mb-6 px-4 ${isRpgMode ? 'text-slate-600' : 'text-slate-300'}`}>Menu</div>
+            <div className={`text-[10px] uppercase font-black tracking-[0.3em] mb-6 px-4 ${theme.muted}`}>System Menu</div>
             {items.map((item) => (
               <NavLink key={item.name} item={item} />
             ))}
@@ -127,41 +146,41 @@ export default function Sidebar({ isOpen, setIsOpen }: SidebarProps) {
 
           {/* User Profile */}
           <div className="mt-auto space-y-6">
-            <div className={`rounded-[2rem] p-6 flex flex-col gap-4 border ${isRpgMode ? 'bg-slate-900 border-slate-800' : 'bg-slate-50 border-slate-100'}`}>
+            <div className={`p-6 flex flex-col gap-4 border transition-all ${theme.card} ${isRpgMode ? 'rounded-none' : 'rounded-[2rem]'}`}>
                <div className="flex items-center gap-4">
-                  <div className={`w-10 h-10 rounded-full flex items-center justify-center ${isRpgMode ? 'bg-cyan-950 text-cyan-400' : 'bg-indigo-100 text-indigo-600'}`}>
+                  <div className={`w-10 h-10 rounded-full flex items-center justify-center ${isRpgMode ? 'bg-emerald-500/10 text-emerald-400' : 'bg-indigo-50 text-indigo-600'}`}>
                     <Zap className="w-5 h-5" />
                   </div>
                   <div>
-                    <div className="text-[10px] font-black uppercase text-slate-400">Streak</div>
-                    <div className={`text-sm font-bold ${isRpgMode ? 'text-cyan-400' : 'text-slate-800'}`}>12 Days Solid</div>
+                    <div className="text-[10px] font-black uppercase text-slate-400 tracking-widest">Streak</div>
+                    <div className={`text-sm font-bold ${isRpgMode ? 'text-emerald-400' : 'text-slate-800'}`}>12 Days</div>
                   </div>
                </div>
             </div>
 
             <div className="flex items-center justify-between px-2">
               <div className="flex items-center gap-3">
-                <div className={`w-10 h-10 rounded-full overflow-hidden border-2 shadow-sm ${isRpgMode ? 'bg-slate-800 border-cyan-900' : 'bg-slate-200 border-white'}`}>
+                <div className={`w-10 h-10 overflow-hidden border-2 shadow-sm transition-all ${isRpgMode ? 'bg-slate-800 border-emerald-900 rounded-none' : 'bg-slate-200 border-white rounded-full'}`}>
                   {userProfile?.photoURL ? (
                     <img src={userProfile.photoURL} alt="Profile" className="w-full h-full object-cover" />
                   ) : (
-                    <div className="w-full h-full flex items-center justify-center text-slate-400 font-bold">
+                    <div className="w-full h-full flex items-center justify-center text-slate-400 font-black">
                       {userProfile?.displayName?.[0] || 'L'}
                     </div>
                   )}
                 </div>
                 <div className="min-w-0">
-                  <div className={`text-xs font-bold truncate w-24 ${isRpgMode ? 'text-white' : 'text-slate-800'}`}>
+                  <div className={`text-xs font-black truncate w-24 ${theme.text}`}>
                     {userProfile?.displayName || 'Learner'}
                   </div>
-                  <div className={`text-[8px] uppercase font-black tracking-widest ${isRpgMode ? 'text-cyan-500' : 'text-slate-400'}`}>
-                    {isRpgMode ? t('advanced_learner') : t('pro_member')}
+                  <div className={`text-[8px] uppercase font-black tracking-widest ${theme.accent}`}>
+                    {isRpgMode ? 'QUEST MASTER' : 'PRO MEMBER'}
                   </div>
                 </div>
               </div>
               <button 
                 onClick={logout}
-                className={`p-2 transition-colors ${isRpgMode ? 'text-slate-600 hover:text-red-400' : 'text-slate-300 hover:text-red-500'}`}
+                className={`p-2 transition-colors ${isRpgMode ? 'text-slate-600 hover:text-emerald-400' : 'text-slate-300 hover:text-indigo-600'}`}
               >
                 <LogOut className="w-5 h-5" />
               </button>
@@ -169,6 +188,7 @@ export default function Sidebar({ isOpen, setIsOpen }: SidebarProps) {
           </div>
         </div>
       </aside>
+
 
       {/* Mobile Overlay */}
       {isOpen && (
