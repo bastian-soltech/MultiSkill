@@ -146,18 +146,7 @@ export default function Sidebar({ isOpen, setIsOpen }: SidebarProps) {
 
           {/* User Profile */}
           <div className="mt-auto space-y-6">
-            <div className={`p-6 flex flex-col gap-4 border transition-all ${theme.card} ${isRpgMode ? 'rounded-none' : 'rounded-[2rem]'}`}>
-               <div className="flex items-center gap-4">
-                  <div className={`w-10 h-10 rounded-full flex items-center justify-center ${isRpgMode ? 'bg-emerald-500/10 text-emerald-400' : 'bg-indigo-50 text-indigo-600'}`}>
-                    <Zap className="w-5 h-5" />
-                  </div>
-                  <div>
-                    <div className="text-[10px] font-black uppercase text-slate-400 tracking-widest">Streak</div>
-                    <div className={`text-sm font-bold ${isRpgMode ? 'text-emerald-400' : 'text-slate-800'}`}>12 Days</div>
-                  </div>
-               </div>
-            </div>
-
+           
             <div className="flex items-center justify-between px-2">
               <div className="flex items-center gap-3">
                 <div className={`w-10 h-10 overflow-hidden border-2 shadow-sm transition-all ${isRpgMode ? 'bg-slate-800 border-emerald-900 rounded-none' : 'bg-slate-200 border-white rounded-full'}`}>
@@ -173,9 +162,7 @@ export default function Sidebar({ isOpen, setIsOpen }: SidebarProps) {
                   <div className={`text-xs font-black truncate w-24 ${theme.text}`}>
                     {userProfile?.displayName || 'Learner'}
                   </div>
-                  <div className={`text-[8px] uppercase font-black tracking-widest ${theme.accent}`}>
-                    {isRpgMode ? 'QUEST MASTER' : 'PRO MEMBER'}
-                  </div>
+                 
                 </div>
               </div>
               <button 

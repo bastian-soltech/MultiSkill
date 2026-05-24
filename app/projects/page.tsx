@@ -147,7 +147,7 @@ export default function MyProjectsPage() {
 
   const handleDeleteProject = async (projectId: string, skillId: string) => {
     setConfirmDelete({
-      message: 'Are you sure you want to delete this project?',
+      message: 'Are you sure you want to delete this project? This action is permanent.',
       action: async () => {
         try {
           const skillRef = doc(db, 'skills', skillId);
@@ -168,173 +168,189 @@ export default function MyProjectsPage() {
     });
   };
 
-  if (loading) {
-    return (
-      <DashboardLayout>
-        <div className="p-12 animate-pulse">
-          <div className="h-12 w-48 bg-slate-200 rounded-xl mb-8" />
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            {[1, 2, 3, 4].map(i => (
-              <div key={i} className="h-64 bg-slate-100 rounded-[3rem]" />
-            ))}
-          </div>
-        </div>
-      </DashboardLayout>
-    );
-  }
-
   return (
     <DashboardLayout>
-      <div className={`transition-colors duration-300 min-h-screen ${isRpgMode ? 'bg-slate-950 text-slate-100' : 'bg-slate-50 text-slate-900'} p-4 sm:p-8 md:p-12`}>
-        <header className="mb-16">
-          <div className={`inline-flex items-center gap-2 text-[10px] font-black uppercase px-4 py-1.5 rounded-full tracking-widest mb-6 ${
-            isRpgMode ? 'bg-indigo-900/40 text-indigo-400 border border-indigo-800' : 'bg-indigo-50 text-indigo-600'
-          }`}>
-            <Box className="w-3 h-3" />
-            {isRpgMode ? t('saved_projects') : t('your_projects')}
-          </div>
-          <h1 className="text-5xl sm:text-6xl font-serif italic mb-6 leading-none tracking-tight">
-            {isRpgMode ? t('your_projects') : t('your_projects')}
-          </h1>
-          <p className={`text-sm sm:text-lg italic max-w-2xl ${isRpgMode ? 'text-slate-400' : 'text-slate-500'}`}>
-            {isRpgMode ? t('projects_desc_rpg') : t('projects_desc_pro')}
-          </p>
-        </header>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
-          {projects.length > 0 ? (
-            projects.map((project) => (
-              <div 
-                key={project.id}
-                className={`p-10 rounded-[3rem] border transition-all flex flex-col justify-between ${
-                  isRpgMode 
-                    ? 'bg-slate-900 border-slate-800 hover:border-cyan-500 shadow-2xl shadow-black/20' 
-                    : 'bg-white border-slate-100 shadow-sm hover:shadow-2xl'
-                }`}
-              >
-                {editingProjectId === project.id ? (
-                  <form onSubmit={handleUpdateProject} className="space-y-4 w-full">
-                    <div className="text-xs uppercase font-black tracking-wider text-slate-500 mb-2">Edit Project</div>
-                    <input 
-                      className={`w-full px-4 py-3 rounded-lg font-bold text-sm focus:outline-none transition-all ${
-                        isRpgMode ? 'bg-slate-950 border border-slate-800 text-white focus:ring-2 focus:ring-cyan-500' : 'bg-white border border-slate-200 focus:ring-2 focus:ring-indigo-500'
-                      }`}
-                      placeholder="Project Name" 
-                      value={editingProjectName}
-                      onChange={e => setEditingProjectName(e.target.value)}
-                      required
-                    />
-                    <textarea 
-                      className={`w-full px-4 py-3 rounded-lg text-sm focus:outline-none transition-all min-h-[85px] ${
-                        isRpgMode ? 'bg-slate-950 border border-slate-800 text-white focus:ring-2 focus:ring-cyan-500' : 'bg-white border border-slate-200 focus:ring-2 focus:ring-indigo-500'
-                      }`}
-                      placeholder="Describe your project contribution..." 
-                      value={editingProjectDesc}
-                      onChange={e => setEditingProjectDesc(e.target.value)}
-                      required
-                    />
-                    <input 
-                      className={`w-full px-4 py-3 rounded-lg text-xs focus:outline-none transition-all ${
-                        isRpgMode ? 'bg-slate-950 border border-slate-800 text-white focus:ring-2 focus:ring-cyan-500' : 'bg-white border border-slate-200 focus:ring-2 focus:ring-indigo-500'
-                      }`}
-                      placeholder="Live Link" 
-                      value={editingProjectLink}
-                      onChange={e => setEditingProjectLink(e.target.value)}
-                    />
-                    <div className="flex gap-3 pt-2">
-                      <button type="submit" className={`px-4 py-2 text-xs rounded-lg font-black uppercase tracking-wider text-white ${isRpgMode ? 'bg-cyan-600 hover:bg-cyan-500' : 'bg-indigo-600 hover:bg-indigo-500'}`}>
-                        Save
-                      </button>
-                      <button type="button" onClick={() => setEditingProjectId(null)} className="px-4 py-2 text-xs rounded-lg font-black uppercase tracking-wider text-slate-400 hover:text-slate-600 bg-slate-200/50 hover:bg-slate-200 pointer-events-auto">
-                        Cancel
-                      </button>
-                    </div>
-                  </form>
-                ) : (
-                  <>
-                    <div>
-                      <div className="flex justify-between items-start mb-8">
-                        <div className={`p-4 rounded-2xl ${isRpgMode ? 'bg-slate-950 text-cyan-400 border border-slate-800' : 'bg-indigo-50 text-indigo-600'}`}>
-                          {isRpgMode ? <Sword className="w-6 h-6" /> : <Zap className="w-6 h-6" />}
-                        </div>
-                        <div className="flex items-center gap-3">
-                          <span className={`text-[10px] font-black uppercase tracking-[0.2em] ${isRpgMode ? 'text-slate-600' : 'text-slate-300'}`}>
-                            {new Date(project.createdAt).toLocaleDateString()}
-                          </span>
-                          <div className="flex gap-1.5">
-                            <button 
-                              onClick={() => handleStartEdit(project)} 
-                              className={`p-1.5 rounded-lg border transition-colors ${
-                                isRpgMode 
-                                  ? 'bg-slate-950 border-slate-800 text-cyan-400 hover:bg-cyan-950/40 hover:border-cyan-800' 
-                                  : 'bg-slate-50 border-slate-100 text-slate-500 hover:bg-slate-100 hover:border-slate-200'
-                              }`}
-                              title="Edit Project"
-                            >
-                              <Edit3 className="w-3.5 h-3.5" />
-                            </button>
-                            <button 
-                              onClick={() => handleDeleteProject(project.id, project.skillId)} 
-                              className={`p-1.5 rounded-lg border transition-colors ${
-                                isRpgMode 
-                                  ? 'bg-slate-950 border-slate-800 text-red-500 hover:bg-red-950/20 hover:border-red-900' 
-                                  : 'bg-red-50 border-red-100 text-red-500 hover:bg-red-100'
-                              }`}
-                              title="Delete Project"
-                            >
-                              <Trash2 className="w-3.5 h-3.5" />
-                            </button>
-                          </div>
-                        </div>
-                      </div>
-                      <h3 className={`text-3xl font-bold mb-3 ${isRpgMode ? 'text-white' : 'text-slate-800'}`}>{project.name}</h3>
-                      <div className={`inline-flex items-center gap-2 px-3 py-1 rounded-full mb-8 ${isRpgMode ? 'bg-slate-950 border border-slate-800' : 'bg-slate-50'}`}>
-                        <span className={`text-[10px] font-black uppercase tracking-widest leading-none ${isRpgMode ? 'text-slate-500' : 'text-slate-400'}`}>Skill:</span>
-                        <span className={`text-[10px] font-bold leading-none ${isRpgMode ? 'text-cyan-400' : 'text-slate-600'}`}>{project.skillTitle}</span>
-                      </div>
-                      <p className={`text-sm leading-relaxed mb-10 line-clamp-4 ${isRpgMode ? 'text-slate-400' : 'text-slate-500'}`}>
-                        {project.description}
-                      </p>
-                    </div>
-                    
-                    <div className="flex gap-4">
-                      <Link 
-                        href={`/skills/${project.skillId}`}
-                        className={`flex-1 py-4 rounded-2xl text-[10px] font-black uppercase tracking-widest text-center transition-all ${
-                          isRpgMode ? 'bg-slate-950 text-slate-400 border border-slate-800 hover:border-slate-700' : 'bg-slate-50 text-slate-900 border border-slate-100 hover:bg-slate-100'
-                        }`}
-                      >
-                        {t('view_skill')}
-                      </Link>
-                      {project.link && (
-                        <a 
-                          href={project.link}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className={`flex-1 py-4 rounded-2xl text-[10px] font-black uppercase tracking-widest text-center transition-all shadow-lg ${
-                            isRpgMode ? 'bg-cyan-600 text-white shadow-cyan-950 border-b-4 border-cyan-800' : 'bg-slate-900 text-white shadow-slate-100 hover:bg-indigo-600'
-                          }`}
-                        >
-                          {t('view_live')}
-                        </a>
-                      )}
-                    </div>
-                  </>
-                )}
-              </div>
-            ))
+      <div className={`min-h-screen relative transition-colors duration-500 ${theme.bg} ${theme.text} ${theme.font} selection:bg-emerald-500/30 p-4 sm:p-8 md:p-12 overflow-hidden`}>
+        
+        {/* Background Grids & Patterns matching landing page */}
+        <div className="absolute inset-0 pointer-events-none opacity-20 z-0 overflow-hidden">
+          {isRpgMode ? (
+            <>
+              <div className="absolute inset-0 bg-[linear-gradient(rgba(16,185,129,0.05)_1px,transparent_1px),linear-gradient(90deg,rgba(16,185,129,0.05)_1px,transparent_1px)] bg-[size:40px_40px]" />
+              <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.03] contrast-150 brightness-150" />
+            </>
           ) : (
-            <div className={`md:col-span-2 text-center py-40 rounded-[4rem] border-2 border-dashed ${
-              isRpgMode ? 'bg-slate-900 border-slate-800 text-slate-700' : 'bg-white border-slate-200 text-slate-400'
-            }`}>
-              {isRpgMode ? <Scroll className="w-16 h-16 mx-auto mb-8 opacity-20" /> : <Trophy className="w-16 h-16 mx-auto mb-8 opacity-20" />}
-              <p className="font-serif italic text-3xl">No projects found.</p>
-              <Link href="/dashboard" className={`inline-block mt-10 font-black uppercase text-[10px] tracking-widest hover:underline ${isRpgMode ? 'text-cyan-400' : 'text-indigo-600'}`}>
-                {t('add_project')}
-              </Link>
-            </div>
+            <div className="absolute inset-0 bg-[radial-gradient(#e2e8f0_1px,transparent_1px)] [background-size:32px_32px]" />
           )}
         </div>
+
+        {loading ? (
+          /* SKELETON UI */
+          <div className="relative z-10 animate-pulse">
+            <header className="mb-16 space-y-6">
+              <div className={`h-6 w-32 ${isRpgMode ? 'bg-slate-900' : 'bg-indigo-50'} rounded-full`} />
+              <div className={`h-16 w-64 ${isRpgMode ? 'bg-slate-900' : 'bg-slate-200'} rounded-2xl`} />
+              <div className={`h-4 w-96 ${isRpgMode ? 'bg-slate-900' : 'bg-slate-100'} rounded-lg`} />
+            </header>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+              {[1, 2, 3, 4].map(i => (
+                <div key={i} className={`h-96 border ${isRpgMode ? 'bg-slate-900/50 border-slate-800 rounded-none' : 'bg-white border-slate-100 rounded-[3rem] shadow-sm'}`} />
+              ))}
+            </div>
+          </div>
+        ) : (
+          /* ACTUAL CONTENT */
+          <div className="relative z-10">
+            <header className="mb-16">
+              <div className={`inline-flex items-center gap-2 text-[10px] font-black uppercase px-4 py-1.5 border tracking-widest mb-6 ${
+                isRpgMode ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20 rounded-none' : 'bg-indigo-50 text-indigo-600 border-indigo-100 rounded-full'
+              }`}>
+                <Box className="w-3 h-3" />
+                {isRpgMode ? 'ARCHIVE OF ARTIFACTS' : 'Project Gallery'}
+              </div>
+              <h1 className={`text-5xl sm:text-6xl mb-6 leading-none tracking-tighter ${theme.heading}`}>
+                {t('your_projects')}
+              </h1>
+              <p className={`text-sm sm:text-lg italic max-w-2xl ${theme.muted}`}>
+                {isRpgMode ? t('projects_desc_rpg') : t('projects_desc_pro')}
+              </p>
+            </header>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+              {projects.length > 0 ? (
+                projects.map((project) => (
+                  <motion.div 
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    key={project.id}
+                    className={`p-10 border transition-all flex flex-col justify-between group overflow-hidden ${theme.card} ${isRpgMode ? 'rounded-none' : 'rounded-[3rem]'}`}
+                  >
+                    {editingProjectId === project.id ? (
+                      <form onSubmit={handleUpdateProject} className="space-y-4 w-full">
+                        <div className={`text-xs font-black uppercase tracking-wider mb-4 ${theme.muted}`}>Edit Project</div>
+                        <input 
+                          className={`w-full px-4 py-3 font-bold text-sm focus:outline-none transition-all border ${theme.input} ${isRpgMode ? 'rounded-none' : 'rounded-lg'}`}
+                          placeholder="Project Name" 
+                          value={editingProjectName}
+                          onChange={e => setEditingProjectName(e.target.value)}
+                          required
+                        />
+                        <textarea 
+                          className={`w-full px-4 py-3 text-sm focus:outline-none transition-all min-h-[85px] border ${theme.input} ${isRpgMode ? 'rounded-none' : 'rounded-lg'}`}
+                          placeholder="Describe your project contribution..." 
+                          value={editingProjectDesc}
+                          onChange={e => setEditingProjectDesc(e.target.value)}
+                          required
+                        />
+                        <input 
+                          className={`w-full px-4 py-3 text-xs focus:outline-none transition-all border ${theme.input} ${isRpgMode ? 'rounded-none' : 'rounded-lg'}`}
+                          placeholder="Live Link" 
+                          value={editingProjectLink}
+                          onChange={e => setEditingProjectLink(e.target.value)}
+                        />
+                        <div className="flex gap-3 pt-2">
+                          <button type="submit" className={`px-6 py-2.5 text-xs font-black uppercase tracking-wider text-white transition-all ${isRpgMode ? 'bg-emerald-500 hover:bg-emerald-400 text-slate-950 rounded-none' : 'bg-indigo-600 hover:bg-indigo-500 rounded-lg'}`}>
+                            Save
+                          </button>
+                          <button type="button" onClick={() => setEditingProjectId(null)} className="px-6 py-2.5 text-xs font-black uppercase tracking-wider text-slate-400 hover:text-slate-600 bg-slate-200/50 hover:bg-slate-200 transition-all rounded-lg">
+                            Cancel
+                          </button>
+                        </div>
+                      </form>
+                    ) : (
+                      <>
+                        <div className="relative">
+                          {isRpgMode && (
+                            <div className="absolute -top-10 -right-10 p-8 text-[8px] font-black text-emerald-500/10 tracking-[0.5em] rotate-90">ARTIFACT_ID_{project.id.slice(0, 4)}</div>
+                          )}
+                          <div className="flex justify-between items-start mb-8">
+                            <div className={`p-4 border transition-all ${isRpgMode ? 'bg-slate-950 text-emerald-400 border-emerald-500/20 rounded-none' : 'bg-indigo-50 text-indigo-600 border-indigo-100 rounded-2xl'}`}>
+                              {isRpgMode ? <Sword className="w-6 h-6" /> : <Zap className="w-6 h-6" />}
+                            </div>
+                            <div className="flex items-center gap-3">
+                              <span className={`text-[10px] font-black uppercase tracking-[0.2em] ${theme.muted}`}>
+                                {new Date(project.createdAt).toLocaleDateString()}
+                              </span>
+                              {user?.uid === user?.uid && ( // Static owner check for now as these are user projects
+                                <div className="flex gap-1.5">
+                                  <button 
+                                    onClick={() => handleStartEdit(project)} 
+                                    className={`p-2 border transition-colors ${
+                                      isRpgMode 
+                                        ? 'bg-slate-900 border-slate-800 text-emerald-400 hover:bg-emerald-950/40 hover:border-emerald-800 rounded-none' 
+                                        : 'bg-slate-50 border-slate-100 text-slate-500 hover:bg-slate-100 hover:border-slate-200 rounded-xl'
+                                    }`}
+                                    title="Edit Project"
+                                  >
+                                    <Edit3 className="w-4 h-4" />
+                                  </button>
+                                  <button 
+                                    onClick={() => handleDeleteProject(project.id, project.skillId)} 
+                                    className={`p-2 border transition-colors ${
+                                      isRpgMode 
+                                        ? 'bg-slate-900 border-slate-800 text-red-500 hover:bg-red-950/20 hover:border-red-900 rounded-none' 
+                                        : 'bg-red-50 border-red-100 text-red-500 hover:bg-red-100 rounded-xl'
+                                    }`}
+                                    title="Delete Project"
+                                  >
+                                    <Trash2 className="w-4 h-4" />
+                                  </button>
+                                </div>
+                              )}
+                            </div>
+                          </div>
+                          <h3 className={`text-3xl mb-3 ${theme.heading} ${theme.text}`}>{project.name}</h3>
+                          <div className={`inline-flex items-center gap-2 px-3 py-1 border transition-all mb-8 ${isRpgMode ? 'bg-slate-950 border-slate-800 rounded-none' : 'bg-slate-50 border-slate-100 rounded-full'}`}>
+                            <span className={`text-[10px] font-black uppercase tracking-widest leading-none ${theme.muted}`}>Source:</span>
+                            <span className={`text-[10px] font-bold leading-none ${theme.accent}`}>{project.skillTitle}</span>
+                          </div>
+                          <p className={`text-sm leading-relaxed mb-10 line-clamp-4 ${theme.muted}`}>
+                            {project.description}
+                          </p>
+                        </div>
+                        
+                        <div className="flex gap-4">
+                          <Link 
+                            href={`/skills/${project.skillId}`}
+                            className={`flex-1 py-4 text-[10px] font-black uppercase tracking-widest text-center transition-all border ${
+                              isRpgMode 
+                                ? 'bg-slate-950 text-emerald-400 border-emerald-900/50 hover:bg-emerald-500/10 rounded-none' 
+                                : 'bg-slate-50 text-slate-900 border-slate-100 hover:bg-slate-100 rounded-xl'
+                            }`}
+                          >
+                            {t('view_skill')}
+                          </Link>
+                          {project.link && (
+                            <a 
+                              href={project.link}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className={`flex-1 py-4 text-[10px] font-black uppercase tracking-widest text-center transition-all flex items-center justify-center gap-2 group/link ${theme.button} ${isRpgMode ? 'rounded-none' : 'rounded-xl'}`}
+                            >
+                              {t('view_live')}
+                              <ExternalLink className="w-3 h-3 group-hover/link:translate-x-0.5 group-hover/link:-translate-y-0.5 transition-transform" />
+                            </a>
+                          )}
+                        </div>
+                      </>
+                    )}
+                  </motion.div>
+                ))
+              ) : (
+                <div className={`md:col-span-2 text-center py-40 border-2 border-dashed ${
+                  isRpgMode ? 'bg-slate-900 border-slate-800 text-slate-700 rounded-none' : 'bg-white border-slate-200 text-slate-400 rounded-[4rem]'
+                }`}>
+                  {isRpgMode ? <Scroll className="w-16 h-16 mx-auto mb-8 opacity-20" /> : <Trophy className="w-16 h-16 mx-auto mb-8 opacity-20" />}
+                  <p className="font-serif italic text-3xl">No projects found.</p>
+                  <Link href="/dashboard" className={`inline-block mt-10 font-black uppercase text-[10px] tracking-widest hover:underline ${theme.accent}`}>
+                    {t('add_project')}
+                  </Link>
+                </div>
+              )}
+            </div>
+          </div>
+        )}
       </div>
 
       <AnimatePresence>
@@ -344,22 +360,22 @@ export default function MyProjectsPage() {
                initial={{ opacity: 0, y: 20, scale: 0.95 }} 
                animate={{ opacity: 1, y: 0, scale: 1 }} 
                exit={{ opacity: 0, y: 20, scale: 0.95 }} 
-               className={`w-full max-w-md rounded-[2.5rem] p-10 shadow-2xl relative transition-colors ${
-                 isRpgMode ? 'bg-slate-900 border border-slate-800 text-white' : 'bg-white text-slate-900'
+               className={`w-full max-w-md p-10 shadow-2xl relative transition-all border ${
+                 isRpgMode ? 'bg-slate-900 border border-slate-800 text-white rounded-none' : 'bg-white text-slate-900 rounded-[2.5rem]'
                }`}
              >
                <button 
                  onClick={() => setConfirmDelete(null)} 
-                 className={`absolute top-6 right-6 p-2 rounded-full transition-colors ${
-                   isRpgMode ? 'hover:bg-slate-800 text-slate-400' : 'hover:bg-slate-100 text-slate-400'
+                 className={`absolute top-6 right-6 p-2 transition-colors ${
+                   isRpgMode ? 'hover:bg-slate-800 text-slate-400 rounded-none' : 'hover:bg-slate-100 text-slate-400 rounded-full'
                  }`}
                >
                  <X className="w-5 h-5" />
                </button>
                
                <div className="flex flex-col items-center text-center mt-4">
-                 <div className={`p-4 rounded-full mb-6 ${
-                   isRpgMode ? 'bg-red-950/40 text-red-400 border border-red-900/50' : 'bg-red-50 text-red-500 border border-red-100'
+                 <div className={`p-4 mb-6 border ${
+                   isRpgMode ? 'bg-red-900/40 text-red-400 border-red-900/50 rounded-none' : 'bg-red-50 text-red-500 border border-red-100 rounded-full'
                  }`}>
                    <Trash2 className="w-8 h-8" />
                  </div>
@@ -375,10 +391,10 @@ export default function MyProjectsPage() {
                    <button 
                      type="button" 
                      onClick={() => setConfirmDelete(null)} 
-                     className={`flex-1 py-4 text-[10px] font-black uppercase tracking-widest rounded-xl border transition-colors ${
+                     className={`flex-1 py-4 text-[10px] font-black uppercase tracking-widest border transition-colors ${
                        isRpgMode 
-                         ? 'border-slate-800 text-slate-400 hover:bg-slate-800' 
-                         : 'border-slate-200 text-slate-500 hover:bg-slate-50'
+                         ? 'border-slate-800 text-slate-400 hover:bg-slate-800 rounded-none' 
+                         : 'border-slate-200 text-slate-500 hover:bg-slate-50 rounded-xl'
                      }`}
                    >
                      {t('cancel') || 'Cancel'}
@@ -389,7 +405,9 @@ export default function MyProjectsPage() {
                        confirmDelete.action();
                        setConfirmDelete(null);
                      }}
-                     className={`flex-1 py-4 text-[10px] font-black uppercase tracking-widest rounded-xl text-white transition-colors bg-red-600 hover:bg-red-500 shadow-md`}
+                     className={`flex-1 py-4 text-[10px] font-black uppercase tracking-widest text-white transition-colors bg-red-600 hover:bg-red-500 shadow-md ${
+                       isRpgMode ? 'rounded-none' : 'rounded-xl'
+                     }`}
                    >
                      {t('delete') || 'Delete'}
                    </button>

@@ -20,7 +20,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${inter.variable} ${playfair.variable} font-sans antialiased text-slate-900 bg-[#F8FAFC]`}>
+      <body className={`${inter.variable} ${playfair.variable} font-sans antialiased text-slate-900`}>
         <AuthProvider>
           <LanguageProvider>
             <ModeProvider>

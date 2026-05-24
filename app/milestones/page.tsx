@@ -6,6 +6,7 @@ import { collection, query, where, getDocs } from 'firebase/firestore';
 import { useAuth } from '@/lib/AuthContext';
 import DashboardLayout from '@/components/DashboardLayout';
 import { useLanguage } from '@/lib/LanguageContext';
+import { motion, AnimatePresence } from 'framer-motion';
 import { 
   CheckCircle2, 
   Circle, 
@@ -15,7 +16,8 @@ import {
   ChevronRight,
   Sword,
   Shield,
-  Trophy
+  Trophy,
+  Scroll
 } from 'lucide-react';
 import Link from 'next/link';
 import { useMode } from '@/lib/ModeContext';
@@ -86,96 +88,115 @@ export default function MilestonesPage() {
     }))
   ).sort((a, b) => (a.completed === b.completed ? 0 : a.completed ? 1 : -1));
 
-  if (loading) {
-    return (
-      <DashboardLayout>
-        <div className="p-12 animate-pulse">
-          <div className="h-12 w-48 bg-slate-200 rounded-xl mb-8" />
-          <div className="space-y-4">
-            {[1, 2, 3].map(i => (
-              <div key={i} className="h-32 bg-slate-100 rounded-3xl" />
-            ))}
-          </div>
-        </div>
-      </DashboardLayout>
-    );
-  }
-
   return (
     <DashboardLayout>
-      <div className={`transition-colors duration-300 p-4 sm:p-8 md:p-12`}>
-        <header className="mb-16">
-          <div className={`inline-flex items-center gap-2 text-[10px] font-black uppercase px-4 py-1.5 rounded-full tracking-widest mb-6 ${
-            isRpgMode ? 'bg-amber-900/30 text-amber-500 border border-amber-800/50' : 'bg-indigo-50 text-indigo-600'
-          }`}>
-            {isRpgMode ? <Trophy className="w-3 h-3" /> : <Target className="w-3 h-3" />}
-            {t('milestones')}
-          </div>
-          <h1 className="text-5xl sm:text-6xl font-serif italic mb-6 leading-none tracking-tight">
-            {isRpgMode ? t('your_milestones') : t('active_milestones')}
-          </h1>
-          <p className={`text-sm sm:text-lg italic max-w-2xl ${isRpgMode ? 'text-slate-400' : 'text-slate-500'}`}>
-            {isRpgMode ? t('milestones_desc_rpg') : t('milestones_desc_pro')}
-          </p>
-        </header>
-
-        <div className="grid grid-cols-1 gap-6 max-w-5xl">
-          {allMilestones.length > 0 ? (
-            allMilestones.map((milestone) => (
-              <Link 
-                key={`${milestone.skillId}-${milestone.id}`}
-                href={`/skills/${milestone.skillId}`}
-                className={`group p-8 rounded-[2.5rem] border transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-8 ${
-                  isRpgMode 
-                    ? 'bg-slate-900 border-slate-800 hover:border-cyan-500 shadow-2xl shadow-black/20' 
-                    : 'bg-white border-slate-100 shadow-sm hover:shadow-xl hover:border-indigo-100'
-                }`}
-              >
-                <div className="flex items-center gap-8">
-                  <div className={`w-14 h-14 rounded-2xl flex items-center justify-center transition-all flex-shrink-0 ${
-                    milestone.completed 
-                      ? (isRpgMode ? 'bg-emerald-900/40 text-emerald-400 border border-emerald-800' : 'bg-emerald-50 text-emerald-600') 
-                      : (isRpgMode ? 'bg-slate-950 text-slate-600 border border-slate-800' : 'bg-indigo-50 text-indigo-600')
-                  }`}>
-                    {milestone.completed ? <CheckCircle2 className="w-7 h-7" /> : <Sword className="w-7 h-7" />}
-                  </div>
-                  <div>
-                    <h3 className={`text-2xl font-bold mb-2 ${
-                      milestone.completed 
-                        ? (isRpgMode ? 'text-slate-600 line-through' : 'text-slate-400 line-through text-slate-300') 
-                        : (isRpgMode ? 'text-white' : 'text-slate-800')
-                    }`}>
-                      {milestone.title}
-                    </h3>
-                    <div className="flex flex-wrap items-center gap-3">
-                       <span className={`text-[10px] font-black uppercase px-2.5 py-1 rounded leading-none ${
-                         isRpgMode ? 'bg-slate-950 text-cyan-400 border border-cyan-900/50' : 'bg-slate-100 text-slate-400'
-                       }`}>
-                         {milestone.skillTitle}
-                       </span>
-                       <span className="text-[10px] font-bold text-slate-600">•</span>
-                       <span className={`text-[10px] font-black uppercase tracking-widest ${isRpgMode ? 'text-slate-500' : 'text-slate-400'}`}>
-                         {milestone.subpaths.length} {t('steps')}
-                       </span>
-                    </div>
-                  </div>
-                </div>
-                
-                <div className={`flex items-center gap-4 transition-colors ${isRpgMode ? 'text-slate-700 group-hover:text-cyan-400' : 'text-slate-300 group-hover:text-indigo-600'}`}>
-                  <span className="text-[10px] font-black uppercase tracking-widest hidden lg:block">{t('view_path')}</span>
-                  <ChevronRight className="w-6 h-6 group-hover:translate-x-2 transition-transform" />
-                </div>
-              </Link>
-            ))
+      <div className={`min-h-screen relative transition-colors duration-500 ${theme.bg} ${theme.text} ${theme.font} selection:bg-emerald-500/30 p-4 sm:p-8 md:p-12 overflow-hidden`}>
+        
+        {/* Background Grids & Patterns matching landing page */}
+        <div className="absolute inset-0 pointer-events-none opacity-20 z-0 overflow-hidden">
+          {isRpgMode ? (
+            <>
+              <div className="absolute inset-0 bg-[linear-gradient(rgba(16,185,129,0.05)_1px,transparent_1px),linear-gradient(90deg,rgba(16,185,129,0.05)_1px,transparent_1px)] bg-[size:40px_40px]" />
+              <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.03] contrast-150 brightness-150" />
+            </>
           ) : (
-            <div className={`text-center py-24 rounded-[4rem] border-2 border-dashed ${
-              isRpgMode ? 'bg-slate-900 border-slate-800 text-slate-600' : 'bg-white border-slate-200 text-slate-400'
-            }`}>
-              <p className="font-serif italic text-3xl">No milestones found.</p>
-              <p className="mt-4 text-sm font-bold uppercase tracking-widest opacity-50">Start a skill to see your roadmap.</p>
-            </div>
+            <div className="absolute inset-0 bg-[radial-gradient(#e2e8f0_1px,transparent_1px)] [background-size:32px_32px]" />
           )}
         </div>
+
+        {loading ? (
+          /* SKELETON UI */
+          <div className="relative z-10 animate-pulse">
+            <header className="mb-16 space-y-6">
+              <div className={`h-6 w-32 ${isRpgMode ? 'bg-slate-900' : 'bg-indigo-50'} rounded-full`} />
+              <div className={`h-16 w-80 ${isRpgMode ? 'bg-slate-900' : 'bg-slate-200'} rounded-2xl`} />
+              <div className={`h-4 w-96 ${isRpgMode ? 'bg-slate-900' : 'bg-slate-100'} rounded-lg`} />
+            </header>
+
+            <div className="space-y-6 max-w-5xl">
+              {[1, 2, 3, 4, 5].map(i => (
+                <div key={i} className={`h-32 border ${isRpgMode ? 'bg-slate-900/50 border-slate-800 rounded-none' : 'bg-white border-slate-100 rounded-[2.5rem] shadow-sm'}`} />
+              ))}
+            </div>
+          </div>
+        ) : (
+          /* ACTUAL CONTENT */
+          <div className="relative z-10">
+            <header className="mb-16">
+              <div className={`inline-flex items-center gap-2 text-[10px] font-black uppercase px-4 py-1.5 border tracking-widest mb-6 ${
+                isRpgMode ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20 rounded-none' : 'bg-indigo-50 text-indigo-600 border-indigo-100 rounded-full'
+              }`}>
+                {isRpgMode ? <Trophy className="w-3 h-3" /> : <Target className="w-3 h-3" />}
+                {t('milestones')}
+              </div>
+              <h1 className={`text-5xl sm:text-6xl mb-6 leading-none tracking-tighter ${theme.heading}`}>
+                {isRpgMode ? 'CHRONICLE OF CONQUEST' : t('active_milestones')}
+              </h1>
+              <p className={`text-sm sm:text-lg italic max-w-2xl ${theme.muted}`}>
+                {isRpgMode ? t('milestones_desc_rpg') : t('milestones_desc_pro')}
+              </p>
+            </header>
+
+            <div className="grid grid-cols-1 gap-6 max-w-5xl">
+              {allMilestones.length > 0 ? (
+                allMilestones.map((milestone) => (
+                  <Link 
+                    key={`${milestone.skillId}-${milestone.id}`}
+                    href={`/skills/${milestone.skillId}`}
+                    className={`group p-8 border transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-8 ${theme.card} ${isRpgMode ? 'rounded-none hover:border-emerald-500' : 'rounded-[2.5rem] hover:shadow-xl hover:border-indigo-100'}`}
+                  >
+                    <div className="flex items-center gap-8">
+                      <div className={`w-14 h-14 border transition-all flex-shrink-0 flex items-center justify-center ${
+                        milestone.completed 
+                          ? (isRpgMode ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30 rounded-none' : 'bg-emerald-50 text-emerald-600 border-emerald-100 rounded-2xl') 
+                          : (isRpgMode ? 'bg-slate-950 text-slate-600 border-slate-800 rounded-none' : 'bg-indigo-50 text-indigo-600 border-indigo-100 rounded-2xl')
+                      }`}>
+                        {milestone.completed ? <CheckCircle2 className="w-7 h-7" /> : <Sword className="w-7 h-7" />}
+                      </div>
+                      <div>
+                        <h3 className={`text-2xl font-bold mb-2 ${
+                          milestone.completed 
+                            ? (isRpgMode ? 'text-slate-600 line-through' : 'text-slate-400 line-through') 
+                            : (isRpgMode ? 'text-white font-mono uppercase' : 'text-slate-800 font-serif italic')
+                        }`}>
+                          {milestone.title}
+                        </h3>
+                        <div className="flex flex-wrap items-center gap-3">
+                          <div className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 border text-[10px] font-black uppercase tracking-widest ${
+                            isRpgMode ? 'bg-slate-950 border-slate-800 text-slate-500 rounded-none' : 'bg-slate-50 border-slate-100 text-slate-500 rounded-full'
+                          }`}>
+                            <span className="opacity-50">Origin:</span>
+                            <span className={theme.accent}>{milestone.skillTitle}</span>
+                          </div>
+                          {milestone.completed && (
+                            <span className={`text-[10px] font-black uppercase tracking-widest px-2 py-0.5 ${isRpgMode ? 'text-emerald-500/50' : 'text-emerald-600/50'}`}>[ COMPLETED ]</span>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <div className={`flex items-center gap-2 text-[10px] font-black uppercase tracking-widest transition-all ${
+                      isRpgMode ? 'text-emerald-400 group-hover:translate-x-2' : 'text-indigo-600 group-hover:translate-x-2'
+                    }`}>
+                      {isRpgMode ? 'VIEW LOGS' : 'View Path'}
+                      <ArrowRight className="w-4 h-4" />
+                    </div>
+                  </Link>
+                ))
+              ) : (
+                <div className={`text-center py-40 border-2 border-dashed ${
+                  isRpgMode ? 'bg-slate-900 border-slate-800 text-slate-700 rounded-none' : 'bg-white border-slate-200 text-slate-400 rounded-[4rem]'
+                }`}>
+                  {isRpgMode ? <Scroll className="w-16 h-16 mx-auto mb-8 opacity-20" /> : <Target className="w-16 h-16 mx-auto mb-8 opacity-20" />}
+                  <p className="font-serif italic text-3xl">No milestones yet.</p>
+                  <p className={`mt-4 text-xs font-black uppercase tracking-widest ${theme.muted}`}>
+                    Initialize a skill path to start tracking conquest.
+                  </p>
+                </div>
+              )}
+            </div>
+          </div>
+        )}
       </div>
     </DashboardLayout>
   );

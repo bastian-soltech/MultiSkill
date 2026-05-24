@@ -7,11 +7,13 @@ import { Sparkles, ArrowRight, Compass, Zap, CheckCircle2, Menu, X, Sword, Brief
 
 import { useLanguage } from '@/lib/LanguageContext';
 import { useMode } from '@/lib/ModeContext';
+import { useAuth } from '@/lib/AuthContext';
 
 export default function LandingPage() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { t, language, setLanguage } = useLanguage();
   const { isRpgMode, setIsRpgMode } = useMode();
+  const { user, logout } = useAuth();
 
   // Theme tokens based on mode
   const theme = {
@@ -90,10 +92,24 @@ export default function LandingPage() {
             </button>
           </div>
           
-          <Link href="/login" className={`text-[10px] font-black uppercase tracking-widest ${isRpgMode ? 'text-slate-400 hover:text-emerald-400' : 'text-slate-500 hover:text-indigo-600'} transition-colors`}>Login</Link>
-          <Link href="/register" className={`px-8 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${theme.button}`}>
-            {t('get_started')}
-          </Link>
+          {user ? (
+            <>
+              <Link href="/dashboard" className={`text-[10px] font-black uppercase tracking-widest ${isRpgMode ? 'text-slate-400 hover:text-emerald-400' : 'text-slate-500 hover:text-indigo-600'} transition-colors`}>Dashboard</Link>
+              <button 
+                onClick={() => logout()}
+                className={`px-8 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${theme.button}`}
+              >
+                Logout
+              </button>
+            </>
+          ) : (
+            <>
+              <Link href="/login" className={`text-[10px] font-black uppercase tracking-widest ${isRpgMode ? 'text-slate-400 hover:text-emerald-400' : 'text-slate-500 hover:text-indigo-600'} transition-colors`}>Login</Link>
+              <Link href="/register" className={`px-8 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${theme.button}`}>
+                {t('get_started')}
+              </Link>
+            </>
+          )}
         </div>
 
         {/* Mobile Toggle */}
@@ -134,8 +150,22 @@ export default function LandingPage() {
               </div>
             </div>
 
-            <Link href="/login" onClick={() => setIsMenuOpen(false)} className={`text-4xl ${theme.heading}`}>Login</Link>
-            <Link href="/register" onClick={() => setIsMenuOpen(false)} className={`text-4xl ${theme.heading} ${theme.accent}`}>Get Started</Link>
+            {user ? (
+              <>
+                <Link href="/dashboard" onClick={() => setIsMenuOpen(false)} className={`text-4xl ${theme.heading}`}>Dashboard</Link>
+                <button 
+                  onClick={() => { logout(); setIsMenuOpen(false); }} 
+                  className={`text-left text-4xl ${theme.heading} ${theme.accent}`}
+                >
+                  Logout
+                </button>
+              </>
+            ) : (
+              <>
+                <Link href="/login" onClick={() => setIsMenuOpen(false)} className={`text-4xl ${theme.heading}`}>Login</Link>
+                <Link href="/register" onClick={() => setIsMenuOpen(false)} className={`text-4xl ${theme.heading} ${theme.accent}`}>Get Started</Link>
+              </>
+            )}
           </motion.div>
         )}
       </AnimatePresence>  
@@ -171,8 +201,8 @@ export default function LandingPage() {
           </p>
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-6 px-4">
-            <Link href="/register" className={`w-full sm:w-auto px-12 py-6 rounded-none text-sm font-black uppercase tracking-widest transition-all flex items-center justify-center gap-3 group ${theme.button}`}>
-              {t('start_journey')}
+            <Link href={user ? "/dashboard" : "/register"} className={`w-full sm:w-auto px-12 py-6 rounded-none text-sm font-black uppercase tracking-widest transition-all flex items-center justify-center gap-3 group ${theme.button}`}>
+              {user ? "Back to Dashboard" : t('start_journey')}
               <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
             </Link>
             {isRpgMode && (

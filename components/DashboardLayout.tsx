@@ -23,15 +23,7 @@ export default function DashboardLayout({
     }
   }, [user, loading, router]);
 
-  if (loading) {
-    return (
-      <div className={`min-h-screen flex items-center justify-center ${isRpgMode ? 'bg-slate-950' : 'bg-[#F8FAFC]'}`}>
-        <div className={`w-10 h-10 border-4 border-t-transparent rounded-full animate-spin ${isRpgMode ? 'border-cyan-500' : 'border-indigo-600'}`}></div>
-      </div>
-    );
-  }
-
-  if (!user) return null;
+  if (!user && !loading) return null;
 
   return (
     <div className={`min-h-screen transition-colors duration-500 flex antialiased ${isRpgMode ? 'bg-slate-950 text-slate-100 font-mono' : 'bg-[#F8FAFC] text-slate-900 font-sans'}`}>
@@ -55,7 +47,7 @@ export default function DashboardLayout({
       <Sidebar isOpen={isSidebarOpen} setIsOpen={setIsSidebarOpen} />
       
       {/* Main Content Area */}
-      <main className="flex-1 lg:pl-72 min-h-screen pt-16 lg:pt-0">
+      <main className="flex-1 lg:pl-72 min-h-screen pt-16 lg:pt-0 overflow-hidden">
         <div className="max-w-[1600px] mx-auto min-h-full">
           {children}
         </div>
