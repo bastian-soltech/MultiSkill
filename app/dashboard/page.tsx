@@ -366,25 +366,25 @@ export default function DashboardPage() {
             {/* Top Stats & Radar Section */}
             {skills.length > 0 && (
               <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-16">
-                <div className={`lg:col-span-2 rounded-[2.5rem] p-8 border transition-all ${theme.card} flex flex-col md:flex-row items-center gap-10`}>
-                  <div className="flex-1 w-full text-center md:text-left">
+                <div className={`lg:col-span-2 rounded-[2.5rem] p-8 border transition-all ${theme.card} flex flex-col xl:flex-row items-center gap-6`}>
+                  <div className="flex-[1.5] w-full text-center xl:text-left">
                     <h3 className={`text-2xl mb-6 ${theme.heading}`}>{isRpgMode ? t('skill_matrix') : t('skill_radar')}</h3>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                      <div className={`p-6 border transition-all ${isRpgMode ? 'bg-slate-950 border-slate-800 rounded-none' : 'bg-slate-50 border-transparent rounded-[2rem]'}`}>
-                        <div className={`text-[10px] uppercase font-black mb-2 tracking-widest ${theme.muted}`}>{isRpgMode ? t('active_quests') : t('total_paths')}</div>
-                        <div className={`text-4xl font-black ${theme.text}`}>{skills.length}</div>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div className={`px-6 py-8 border transition-all flex flex-col justify-center min-h-[140px] ${isRpgMode ? 'bg-slate-950 border-slate-800 rounded-none' : 'bg-slate-50 border-transparent rounded-[2.5rem]'}`}>
+                        <div className={`text-[10px] uppercase font-black mb-3 tracking-widest ${theme.muted}`}>{isRpgMode ? t('active_quests') : t('total_paths')}</div>
+                        <div className={`text-4xl sm:text-5xl font-black ${theme.text}`}>{skills.length}</div>
                       </div>
-                      <div className={`p-6 border transition-all ${isRpgMode ? 'bg-slate-950 border-emerald-950 rounded-none' : 'bg-indigo-50 border-transparent rounded-[2rem]'}`}>
-                        <div className={`text-[10px] uppercase font-black mb-2 tracking-widest ${isRpgMode ? 'text-emerald-500/50' : 'text-indigo-400'}`}>
-                          {isRpgMode ? 'POWER LEVEL' : 'MASTERY POINTS'}
+                      <div className={`px-6 py-8 border transition-all flex flex-col justify-center min-h-[140px] ${isRpgMode ? 'bg-slate-950 border-emerald-900 rounded-none' : 'bg-indigo-50 border-transparent rounded-[2.5rem]'}`}>
+                        <div className={`text-[10px] uppercase font-black mb-3 tracking-widest ${isRpgMode ? 'text-emerald-500/50' : 'text-indigo-400'}`}>
+                          {isRpgMode ? t('power_level') : 'MASTERY POINTS'}
                         </div>
-                        <div className={`text-4xl font-black ${theme.accent}`}>
-                          {totalXp} <span className="text-xl opacity-50">{isRpgMode ? 'XP' : 'PTS'}</span>
+                        <div className={`text-4xl sm:text-5xl font-black ${theme.accent}`}>
+                          {totalXp} <span className="text-lg opacity-50 uppercase tracking-tighter">{isRpgMode ? 'XP' : 'PTS'}</span>
                         </div>
                       </div>
                     </div>
                   </div>
-                  <div className="w-full md:w-80 h-72">
+                  <div className="w-full xl:w-64 h-64 xl:h-72">
                     <ResponsiveContainer width="100%" height="100%">
                       <RadarChart cx="50%" cy="50%" outerRadius="80%" data={chartData}>
                         <PolarGrid stroke={isRpgMode ? "rgba(16,185,129,0.1)" : "#e2e8f0"} />

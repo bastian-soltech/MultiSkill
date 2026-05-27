@@ -178,10 +178,6 @@ export default function LandingPage() {
           transition={{ duration: 0.6 }}
           className="text-center"
         >
-          <div className={`inline-flex items-center gap-2 border px-4 py-2 rounded-full text-[10px] sm:text-xs font-black uppercase tracking-[0.2em] mb-12 ${theme.accentBg} ${theme.accentBorder} ${theme.accent}`}>
-            <Sparkles className="w-3 h-3" />
-            {t('ai_powered')}
-          </div>
           
           <h1 className={`text-5xl sm:text-7xl md:text-9xl mb-10 leading-[0.9] tracking-tighter`}>
             {isRpgMode ? (
@@ -196,7 +192,7 @@ export default function LandingPage() {
             )}
           </h1>
 
-          <p className={`max-w-2xl mx-auto text-lg md:text-xl ${theme.muted} mb-12 leading-relaxed px-4 font-medium`}>
+          <p className={`max-w-3xl mx-auto text-lg md:text-xl ${theme.muted} mb-12 leading-relaxed px-4 font-medium`}>
             {t('landing_desc')}
           </p>
 
