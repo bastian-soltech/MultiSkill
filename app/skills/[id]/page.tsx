@@ -1258,7 +1258,7 @@ export default function SkillDetailsPage() {
                  )}
 
                  {/* AI Recommendations */}
-                 <section className={`p-12 border shadow-2xl relative overflow-hidden group transition-colors ${
+                 {/* <section className={`p-12 border shadow-2xl relative overflow-hidden group transition-colors ${
                    isRpgMode ? 'bg-slate-900 border-slate-800 rounded-none' : 'bg-slate-900 border-slate-800 text-white rounded-[3.5rem]'
                  }`}>
                     <div className={`absolute -top-10 -right-10 w-40 h-40 rounded-full blur-[80px] opacity-20 group-hover:opacity-40 transition-opacity ${isRpgMode ? 'bg-emerald-500' : 'bg-indigo-600'}`} />
@@ -1301,7 +1301,7 @@ export default function SkillDetailsPage() {
                         </button>
                       </div>
                     )}
-                 </section>
+                 </section> */}
               </aside>
             </main>
           </div>
